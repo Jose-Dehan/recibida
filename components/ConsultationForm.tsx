@@ -2,18 +2,10 @@
 
 import { useState } from "react";
 import { AlertCircle, ArrowRight, Search } from "lucide-react";
+import { normalizeReservationStatus } from "@/lib/reservation-status";
 import type { BackendReservation, ReservationLookupReason, ReservationLookupResponse, ReservationStatus } from "@/types";
 import { PrimaryButton } from "./Buttons";
 import { ReservationStatusCard } from "./ReservationStatusCard";
-
-function normalizeStatus(value: unknown): ReservationStatus | null {
-  const status = String(value ?? "").trim().toLowerCase();
-  if (["pending", "pendiente"].includes(status)) return "Pendiente";
-  if (["approved", "aprobado", "verified", "verificado"].includes(status)) return "Aprobado";
-  if (["rejected", "rechazado"].includes(status)) return "Rechazado";
-  if (["expired", "vencido"].includes(status)) return "Vencido";
-  return null;
-}
 
 const lookupFailureContent: Record<ReservationLookupReason, { title: string; description: string }> = {
   CODE_NOT_FOUND: {
@@ -56,7 +48,7 @@ export function ConsultationForm() {
         }
         throw new Error("No pudimos consultar la reserva. Intentá nuevamente.");
       }
-      const status = normalizeStatus(data?.reservation?.status ?? data?.status);
+      const status = normalizeReservationStatus(data?.reservation?.status ?? data?.status);
       if (!status) throw new Error("No pudimos consultar la reserva. Intentá nuevamente.");
       setResult({ status, reservation: { ...data.reservation, code: data.reservation?.code || codigo, dni: data.reservation?.dni || dni, name: data.reservation?.name || "", price: Number(data.reservation?.price) } });
     } catch { setError("No pudimos consultar la reserva. Intentá nuevamente."); }
