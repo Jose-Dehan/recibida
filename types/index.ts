@@ -5,7 +5,19 @@ export type ReservationStatus =
   | "rejected"
   | "cancelled";
 
-export type PublicReservationStatus = "pending" | "approved" | "rejected";
+export type PublicReservationStatus = "pending" | "approved" | "rejected" | "expired";
+
+export type ReservationLookupReason = "CODE_NOT_FOUND" | "DNI_MISMATCH";
+
+export type ReservationLookupResponse = {
+  ok: boolean;
+  found?: boolean;
+  reason?: ReservationLookupReason;
+  reservation?: BackendReservation;
+  status?: string;
+  error?: string;
+  code?: string;
+};
 
 export type Gender = "Hombre" | "Mujer";
 

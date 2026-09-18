@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ArrowRight, UserRound } from "lucide-react";
 import type { ReservationFormValues } from "@/types";
 import { PrimaryButton } from "./Buttons";
 import { ConfirmationBottomSheet } from "./ConfirmationBottomSheet";
@@ -56,6 +57,28 @@ export function ReservationForm({ price }: { price: number }) {
   return (
     <>
       <form className="space-y-5" onSubmit={submit} noValidate>
+        <fieldset>
+          <legend className="mb-2.5 text-sm font-semibold text-zinc-200">Género</legend>
+          <input type="hidden" name="gender" value={values.gender} />
+          <div className="grid grid-cols-2 gap-2.5" role="radiogroup" aria-invalid={Boolean(errors.gender)}>
+            {(["Hombre", "Mujer"] as const).map((gender) => {
+              const selected = values.gender === gender;
+              return (
+                <button
+                  key={gender}
+                  type="button"
+                  role="radio"
+                  aria-checked={selected}
+                  className={`flex min-h-14 items-center justify-center gap-2 rounded-[18px] border text-sm font-bold outline-none transition duration-200 focus-visible:ring-2 focus-visible:ring-accent ${selected ? "border-accent/55 bg-accent/[0.12] text-accent shadow-[0_0_24px_rgba(214,243,106,0.08)]" : "border-white/[0.1] bg-white/[0.04] text-zinc-400 hover:border-white/[0.18] hover:text-zinc-200"}`}
+                  onClick={() => update("gender", gender)}
+                >
+                  <UserRound aria-hidden="true" className="h-4 w-4" strokeWidth={1.9} />{gender}
+                </button>
+              );
+            })}
+          </div>
+          {errors.gender && <p className="mt-2 text-sm text-red-300" role="alert">{errors.gender}</p>}
+        </fieldset>
         <label className="block">
           <span className="mb-2 block text-sm font-semibold text-zinc-200">Nombre y apellido</span>
           <input className="field" name="name" autoComplete="name" required value={values.name} onChange={(e) => update("name", e.target.value)} placeholder="Nombre y apellido" aria-invalid={Boolean(errors.name)} />
@@ -72,20 +95,11 @@ export function ReservationForm({ price }: { price: number }) {
           {errors.email && <p id="email-error" className="mt-2 text-sm text-red-300" role="alert">{errors.email}</p>}
         </label>
         <label className="block">
-          <span className="mb-2 block text-sm font-semibold text-zinc-200">Confirmar email</span>
+          <span className="mb-2 block text-sm font-semibold text-zinc-200">Confirmar Gmail</span>
           <input className="field" name="confirmEmail" type="email" inputMode="email" autoComplete="email" required value={values.confirmEmail} onChange={(e) => update("confirmEmail", e.target.value)} placeholder="Repetí tu email" aria-invalid={Boolean(errors.confirmEmail)} aria-describedby={errors.confirmEmail ? "confirm-email-error" : undefined} />
           {errors.confirmEmail && <p id="confirm-email-error" className="mt-2 text-sm text-red-300" role="alert">{errors.confirmEmail}</p>}
         </label>
-        <label className="block">
-          <span className="mb-2 block text-sm font-semibold text-zinc-200">Género</span>
-          <select className="field appearance-none" name="gender" required value={values.gender} onChange={(e) => update("gender", e.target.value)}>
-            <option value="" disabled>Seleccioná una opción</option>
-            <option value="Hombre">Hombre</option>
-            <option value="Mujer">Mujer</option>
-          </select>
-          {errors.gender && <p className="mt-2 text-sm text-red-300" role="alert">{errors.gender}</p>}
-        </label>
-        <PrimaryButton type="submit">Continuar con la compra</PrimaryButton>
+        <PrimaryButton type="submit"><span className="flex w-full items-center justify-between"><span>Continuar con la compra</span><ArrowRight aria-hidden="true" className="h-5 w-5" /></span></PrimaryButton>
       </form>
       <ConfirmationBottomSheet open={open} values={values} price={price} onClose={() => setOpen(false)} />
     </>

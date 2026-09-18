@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import type { PublicReservationStatus } from "@/types";
+import { AlertCircle, ArrowRight, Search } from "lucide-react";
+import type { PublicReservationStatus, ReservationLookupReason, ReservationLookupResponse } from "@/types";
 import { PrimaryButton } from "./Buttons";
 import { ReservationStatusCard } from "./ReservationStatusCard";
 
@@ -10,30 +11,55 @@ function normalizeStatus(value: unknown): PublicReservationStatus | null {
   if (["pending", "pendiente"].includes(status)) return "pending";
   if (["approved", "aprobado", "verified", "verificado"].includes(status)) return "approved";
   if (["rejected", "rechazado"].includes(status)) return "rejected";
+  if (["expired", "vencido"].includes(status)) return "expired";
   return null;
+}
+
+const lookupFailureContent: Record<ReservationLookupReason, { title: string; description: string }> = {
+  CODE_NOT_FOUND: {
+    title: "Reserva inexistente",
+    description: "No encontramos una reserva con ese código.",
+  },
+  DNI_MISMATCH: {
+    title: "DNI incorrecto",
+    description: "El DNI ingresado no coincide con esta reserva.",
+  },
+};
+
+function isLookupReason(value: unknown): value is ReservationLookupReason {
+  return value === "CODE_NOT_FOUND" || value === "DNI_MISMATCH";
 }
 
 export function ConsultationForm() {
   const [result, setResult] = useState<PublicReservationStatus | null>(null);
+  const [lookupFailure, setLookupFailure] = useState<ReservationLookupReason | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   async function submit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault(); setLoading(true); setError(null); setResult(null);
+    event.preventDefault(); setLoading(true); setError(null); setResult(null); setLookupFailure(null);
     const form = new FormData(event.currentTarget);
     const dni = String(form.get("dni") ?? "").replace(/\D/g, "");
     const codigo = String(form.get("code") ?? "").trim().toUpperCase();
     if (!/^\d{7,8}$/.test(dni) || !codigo) { setError("Ingresá un DNI y un código de reserva válidos."); setLoading(false); return; }
     try {
       const response = await fetch(`/api/reservations?dni=${encodeURIComponent(dni)}&codigo=${encodeURIComponent(codigo)}`, { cache: "no-store" });
-      const data = await response.json();
+      const data = (await response.json()) as ReservationLookupResponse;
+      if (data.ok && data.found === false && isLookupReason(data.reason)) {
+        setLookupFailure(data.reason);
+        return;
+      }
       if (!response.ok || data?.ok === false) {
-        const notFound = ["RESERVATION_NOT_FOUND", "NOT_FOUND"].includes(data?.code);
-        throw new Error(notFound ? "No encontramos una reserva con ese DNI y código." : data?.error || "No pudimos consultar la reserva.");
+        const legacyNotFound = ["RESERVATION_NOT_FOUND", "NOT_FOUND"].includes(data?.code ?? "");
+        if (legacyNotFound) {
+          setLookupFailure("CODE_NOT_FOUND");
+          return;
+        }
+        throw new Error("No pudimos consultar la reserva. Intentá nuevamente.");
       }
       const status = normalizeStatus(data?.reservation?.status ?? data?.status);
-      if (!status) throw new Error("El estado recibido no es válido.");
+      if (!status) throw new Error("No pudimos consultar la reserva. Intentá nuevamente.");
       setResult(status);
-    } catch (reason) { setError(reason instanceof Error ? reason.message : "Error de red. Intentá nuevamente."); }
+    } catch { setError("No pudimos consultar la reserva. Intentá nuevamente."); }
     finally { setLoading(false); }
   }
   return (
@@ -41,9 +67,17 @@ export function ConsultationForm() {
       <form className="space-y-5" onSubmit={submit}>
         <label className="block"><span className="mb-2 block text-sm font-semibold text-zinc-200">DNI</span><input className="field" inputMode="numeric" name="dni" required placeholder="Ingresá tu DNI" /></label>
         <label className="block"><span className="mb-2 block text-sm font-semibold text-zinc-200">Código de reserva</span><input className="field uppercase" name="code" required placeholder="Ingresá tu código" /></label>
-        <PrimaryButton type="submit" disabled={loading}>{loading ? "Consultando…" : "Consultar"}</PrimaryButton>
+        <PrimaryButton type="submit" disabled={loading}><span className="flex w-full items-center justify-between"><span className="flex items-center gap-2.5"><Search aria-hidden="true" className="h-[18px] w-[18px]" />{loading ? "Consultando…" : "Consultar"}</span><ArrowRight aria-hidden="true" className="h-5 w-5" /></span></PrimaryButton>
       </form>
-      {error && <p className="mt-5 rounded-xl border border-red-400/20 bg-red-400/[0.07] p-3 text-sm text-red-200" role="alert">{error}</p>}
+      {error && <p className="mt-5 rounded-[20px] border border-red-400/25 bg-red-400/[0.075] p-4 text-sm leading-6 text-red-200 shadow-[0_16px_42px_rgba(0,0,0,0.25)] backdrop-blur-xl" role="alert">{error}</p>}
+      {lookupFailure && (
+        <section className="relative mt-5 overflow-hidden rounded-[24px] border border-red-400/25 bg-[linear-gradient(135deg,rgba(248,113,113,0.1),rgba(255,255,255,0.025))] p-5 text-red-200 shadow-[0_18px_50px_rgba(0,0,0,0.3)] backdrop-blur-xl" role="status">
+          <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-red-300/55 to-transparent" />
+          <AlertCircle aria-hidden="true" className="mb-4 h-6 w-6" strokeWidth={1.7} />
+          <p className="text-xl font-extrabold tracking-tight">{lookupFailureContent[lookupFailure].title}</p>
+          <p className="mt-2 text-sm leading-6 text-red-100/65">{lookupFailureContent[lookupFailure].description}</p>
+        </section>
+      )}
       {result && <div className="mt-7"><ReservationStatusCard status={result} /></div>}
     </div>
   );

@@ -1,6 +1,28 @@
 import { formatPrice } from "@/lib/format";
 
-export function CurrentPriceCard({ price, compact = false, loading = false, error = null }: { price: number | null; compact?: boolean; loading?: boolean; error?: string | null }) {
+export function CurrentPriceCard({ price, compact = false, featured = false, loading = false, error = null }: { price: number | null; compact?: boolean; featured?: boolean; loading?: boolean; error?: string | null }) {
+  if (featured) {
+    return (
+      <section className="group relative overflow-hidden rounded-[28px] border border-accent/25 bg-[linear-gradient(135deg,rgba(214,243,106,0.12),rgba(18,20,17,0.88)_42%,rgba(12,13,12,0.96))] px-6 py-6 shadow-[0_24px_70px_rgba(0,0,0,0.48),0_0_45px_rgba(214,243,106,0.08)] backdrop-blur-xl transition duration-300 hover:border-accent/40 hover:shadow-[0_24px_75px_rgba(0,0,0,0.48),0_0_55px_rgba(214,243,106,0.13)] sm:px-7 sm:py-7">
+        <div className="absolute -right-12 -top-16 h-40 w-40 rounded-full bg-accent/[0.14] blur-3xl transition-transform duration-500 group-hover:scale-110" />
+        <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-accent/70 to-transparent" />
+        <div className="relative flex items-start justify-between gap-3">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-400">Entrada actual</p>
+            <p className="mt-3 text-[clamp(2.8rem,14vw,4rem)] font-black leading-none tracking-[-0.065em] text-white [text-shadow:0_0_30px_rgba(255,255,255,0.08)]">
+              {loading ? "Cargando…" : error ? "No disponible" : price === null ? "Agotadas" : formatPrice(price)}
+            </p>
+          </div>
+          {!loading && price !== null && (
+            <span className="mt-0.5 shrink-0 rounded-full border border-accent/30 bg-accent/[0.1] px-2.5 py-1.5 text-[9px] font-extrabold uppercase tracking-[0.13em] text-accent shadow-[0_0_20px_rgba(214,243,106,0.1)]">
+              Precio vigente
+            </span>
+          )}
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="relative overflow-hidden rounded-[20px] border border-line/80 bg-[#141416] px-5 py-4 shadow-card">
       <div className="absolute -right-10 -top-12 h-28 w-28 rounded-full bg-accent/[0.035] blur-2xl" />

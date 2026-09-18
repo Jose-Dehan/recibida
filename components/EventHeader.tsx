@@ -1,14 +1,39 @@
+import { CalendarDays, ExternalLink, MapPin } from "lucide-react";
 import { EventAddressLink } from "./EventLocationLinks";
-import { eventDate, eventName, venueArea, venueName } from "@/lib/event-data";
+import { eventBenefit, eventDate, eventName, venueArea, venueName } from "@/lib/event-data";
 
 export function EventHeader() {
+  const [name, suffix] = eventName.split(" ");
+
   return (
-    <header>
-      <p className="eyebrow">Entradas 2026</p>
-      <h1 className="mt-3 text-[2.35rem] font-extrabold leading-none tracking-[-0.045em]">{eventName}</h1>
-      <p className="mt-4 text-[15px] text-zinc-300"><span className="font-medium text-white">{eventDate}</span><span className="mx-2 text-zinc-700">·</span><span className="font-semibold">{venueName}</span></p>
-      <p className="mt-1.5 text-sm text-zinc-500">{venueArea}</p>
-      <p className="mt-3 text-[13px] leading-5 text-zinc-500"><EventAddressLink showIcon /></p>
+    <header className="relative">
+      <div className="flex items-center justify-between gap-4">
+        <p className="text-[11px] font-bold uppercase tracking-[0.26em] text-accent/80">Entradas 2026</p>
+        <span className="rounded-full border border-accent/30 bg-accent/[0.09] px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.16em] text-accent shadow-[0_0_22px_rgba(214,243,106,0.14)]">
+          {eventBenefit}
+        </span>
+      </div>
+
+      <h1 className="mt-5 text-[clamp(3.5rem,17vw,5.25rem)] font-black leading-[0.86] tracking-[-0.075em] text-white">
+        {name} <span className="text-accent [text-shadow:0_0_28px_rgba(214,243,106,0.38)]">{suffix}</span>
+      </h1>
+
+      <div className="mt-7 flex flex-wrap items-center gap-x-2.5 gap-y-2 text-[15px] font-semibold text-zinc-200">
+        <CalendarDays aria-hidden="true" className="h-[18px] w-[18px] text-accent" strokeWidth={1.8} />
+        <span>{eventDate}</span>
+        <span className="text-zinc-600">•</span>
+        <span>{venueName}</span>
+      </div>
+
+      <div className="mt-5 flex items-start gap-3 border-l border-accent/30 pl-3.5">
+        <MapPin aria-hidden="true" className="mt-0.5 h-[18px] w-[18px] shrink-0 text-accent" strokeWidth={1.8} />
+        <div>
+          <p className="text-sm font-bold text-zinc-200">{venueArea}</p>
+          <EventAddressLink className="group mt-1 text-[12px] leading-5 text-zinc-500 hover:text-accent">
+            <ExternalLink aria-hidden="true" className="mt-0.5 h-3.5 w-3.5 shrink-0 opacity-60 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+          </EventAddressLink>
+        </div>
+      </div>
     </header>
   );
 }
