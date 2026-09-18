@@ -27,8 +27,8 @@ export function ReservationForm({ price }: { price: number }) {
           <input className="field" name="dni" inputMode="numeric" autoComplete="off" required value={values.dni} onChange={(e) => update("dni", e.target.value)} placeholder="Sin puntos" />
         </label>
         <label className="block">
-          <span className="mb-2 block text-sm font-semibold text-zinc-200">Email</span>
-          <input className="field" name="email" type="email" inputMode="email" autoComplete="email" required value={values.email} onChange={(e) => update("email", e.target.value)} placeholder="nombre@email.com" />
+          <span className="mb-2 block text-sm font-semibold text-zinc-200">Gmail</span>
+          <input className="field" name="email" type="email" inputMode="email" autoComplete="email" required value={values.email} onChange={(e) => update("email", e.target.value)} placeholder="nombre@gmail.com" />
         </label>
         <label className="block">
           <span className="mb-2 block text-sm font-semibold text-zinc-200">Género</span>

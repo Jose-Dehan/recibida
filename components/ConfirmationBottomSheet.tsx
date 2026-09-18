@@ -17,7 +17,7 @@ export function ConfirmationBottomSheet({ open, values, price, onClose }: { open
         <p className="eyebrow">Último paso</p>
         <h2 id="confirmation-title" className="mt-2 text-2xl font-extrabold tracking-tight">Confirmar compra</h2>
         <dl className="mt-6 divide-y divide-line rounded-2xl border border-line bg-[#111114] px-4">
-          {[["Nombre", values.name], ["DNI", values.dni], ["Email", values.email], ["Género", values.gender], ["Precio", formatPrice(price)]].map(([label, value]) => (
+          {[["Nombre", values.name], ["DNI", values.dni], ["Gmail", values.email], ["Género", values.gender], ["Precio", formatPrice(price)]].map(([label, value]) => (
             <div key={label} className="flex items-start justify-between gap-4 py-3">
               <dt className="text-sm text-zinc-400">{label}</dt><dd className="break-all text-right text-sm font-bold">{value}</dd>
             </div>
