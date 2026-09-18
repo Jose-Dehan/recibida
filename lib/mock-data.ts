@@ -1,9 +1,9 @@
 import type { Reservation } from "@/types";
 
-export const alias = "FIESTA.PALERMO";
-export const paymentOwner = "NOMBRE TITULAR";
-export const whatsappNumber = "5491112345678";
-export const whatsappDisplayNumber = "11 1234 5678";
+export const alias = "jose.dehan.mp";
+export const paymentOwner = "Josefina Dehan";
+export const whatsappNumber = "5491140315120";
+export const whatsappDisplayNumber = "11 4031-5120";
 export const mockReservationCode = "FIESTA-A7K92";
 
 export const reservas: Reservation[] = [
