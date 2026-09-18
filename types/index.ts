@@ -22,5 +22,6 @@ export type Reservation = {
 };
 
 export type ReservationFormValues = Pick<Reservation, "name" | "dni" | "email"> & {
+  confirmEmail: string;
   gender: Gender | "";
 };

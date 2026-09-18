@@ -15,7 +15,7 @@ export function ReservationSummaryCard({ reservation }: { reservation: Reservati
       </div>
       <div className="border-t border-dashed border-line px-5 py-4">
         <p className="text-xs text-zinc-500">Código de reserva</p>
-        <div className="mt-2 flex flex-wrap items-center justify-between gap-3"><p className="break-all text-lg font-bold tracking-[0.08em] text-accent">{reservation.code}</p><CopyButton value={reservation.code} label="Copiar" /></div>
+        <div className="mt-2 flex flex-wrap items-center justify-between gap-3"><p className="break-all font-mono text-xl font-bold tracking-[0.08em] text-accent">{reservation.code}</p><CopyButton value={reservation.code} label="Copiar código" copiedLabel="Código copiado ✓" /></div>
       </div>
     </section>
   );
