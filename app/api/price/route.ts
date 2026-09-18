@@ -1,29 +1,41 @@
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const apiUrl = process.env.APPS_SCRIPT_URL;
-  const trimmedApiUrl = apiUrl?.trim();
-  console.log("APPS_SCRIPT_URL configured:", Boolean(trimmedApiUrl));
-  console.log("Apps Script URL length:", trimmedApiUrl?.length);
+  const rawUrl = process.env.APPS_SCRIPT_URL?.trim();
+  console.log("APPS_SCRIPT_URL configured:", Boolean(rawUrl));
 
-  if (!trimmedApiUrl) {
-    return Response.json({ ok: false, error: "APPS_SCRIPT_URL no configurada" }, { status: 500 });
+  if (!rawUrl) {
+    return Response.json(
+      { ok: false, error: "APPS_SCRIPT_URL no configurada", code: "MISSING_ENV" },
+      { status: 500 },
+    );
   }
 
   try {
-    const url = new URL(trimmedApiUrl);
-    if (!url.pathname.replace(/\/+$/, "").endsWith("/exec")) {
-      return Response.json({ ok: false, error: "APPS_SCRIPT_URL debe terminar en /exec" }, { status: 500 });
-    }
+    const url = new URL(rawUrl);
     url.searchParams.set("action", "getPrice");
-    const response = await fetch(url.toString(), { cache: "no-store" });
-    const data = await response.json();
+
+    const response = await fetch(url.toString(), {
+      method: "GET",
+      cache: "no-store",
+      redirect: "follow",
+    });
+    console.log("Apps Script response status:", response.status);
+
+    const text = await response.text();
+    if (!response.ok) {
+      return Response.json(
+        { ok: false, error: "Apps Script respondió con error", status: response.status, code: "UPSTREAM_ERROR" },
+        { status: response.status },
+      );
+    }
+
+    const data = JSON.parse(text);
     return Response.json(data, { status: response.status });
   } catch (error) {
-    console.error("Error consultando Apps Script:", error instanceof Error ? error.message : error);
     return Response.json(
-      { ok: false, error: "No se pudo conectar con el servicio de reservas", code: "NETWORK_ERROR" },
-      { status: 502 },
+      { ok: false, error: error instanceof Error ? error.message : "Error desconocido", code: "NETWORK_ERROR" },
+      { status: 500 },
     );
   }
 }
