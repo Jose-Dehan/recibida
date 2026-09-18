@@ -35,16 +35,19 @@ export async function POST(request: Request) {
     return Response.json({ ok: false, error: "Datos inválidos", code: "INVALID_DATA" }, { status: 400 });
   }
 
-  const { genero, nombre, dni, email } = input as Record<string, unknown>;
+  const { genero, nombre, dni, email, expectedPrice } = input as Record<string, unknown>;
   if (![genero, nombre, dni, email].every((value) => typeof value === "string" && value.trim())) {
     return Response.json({ ok: false, error: "Todos los datos son obligatorios", code: "INVALID_DATA" }, { status: 400 });
+  }
+  if (typeof expectedPrice !== "number" || !Number.isFinite(expectedPrice) || expectedPrice < 0) {
+    return Response.json({ ok: false, error: "El precio esperado no es válido", code: "INVALID_DATA" }, { status: 400 });
   }
 
   try {
     const response = await fetch(getAppsScriptUrl(), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "createReservation", genero, nombre, dni, email }),
+      body: JSON.stringify({ action: "createReservation", genero, nombre, dni, email, expectedPrice }),
       cache: "no-store",
     });
     return appsScriptResponse(response);

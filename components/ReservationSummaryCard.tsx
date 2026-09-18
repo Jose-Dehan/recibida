@@ -1,7 +1,7 @@
 import { formatPrice } from "@/lib/format";
 import { CopyButton } from "./CopyButton";
 
-type ReservationSummary = { name: string; code: string; price: number; expiresAt: string };
+type ReservationSummary = { name: string; code: string; price: number; expiresAt?: string };
 
 export function ReservationSummaryCard({ reservation }: { reservation: ReservationSummary }) {
   return (
@@ -11,7 +11,7 @@ export function ReservationSummaryCard({ reservation }: { reservation: Reservati
         <p className="mt-1 text-lg font-semibold">{reservation.name}</p>
         <div className="mt-5 grid grid-cols-2 gap-4">
           <div><p className="text-xs text-zinc-500">Precio</p><p className="mt-1 text-xl font-bold tracking-tight">{formatPrice(reservation.price)}</p></div>
-          <div><p className="text-xs text-zinc-500">Fecha límite</p><p className="mt-1 font-semibold">{reservation.expiresAt}</p></div>
+          {reservation.expiresAt && <div><p className="text-xs text-zinc-500">Fecha límite</p><p className="mt-1 font-semibold">{reservation.expiresAt}</p></div>}
         </div>
       </div>
       <div className="border-t border-dashed border-line px-5 py-4">

@@ -8,7 +8,7 @@ import { ReservationForm } from "@/components/ReservationForm";
 import { usePrice } from "@/lib/use-price";
 
 export default function ReservePage() {
-  const { price, loading, error } = usePrice();
+  const { price, loading, error, updatePrice } = usePrice();
 
   return (
     <ExperienceShell>
@@ -29,7 +29,7 @@ export default function ReservePage() {
           </div>
         </div>
       </aside>
-      {!loading && !error && price !== null && <div className="mt-8 pb-5"><ReservationForm price={price} /></div>}
+      {!loading && !error && price !== null && <div className="mt-8 pb-5"><ReservationForm price={price} onPriceChange={updatePrice} /></div>}
     </ExperienceShell>
   );
 }

@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 
-type PriceState = { price: number | null; loading: boolean; error: string | null };
+type PriceValueState = { price: number | null; loading: boolean; error: string | null };
+type PriceState = PriceValueState & { updatePrice: (price: number) => void };
 
 export function usePrice(): PriceState {
-  const [state, setState] = useState<PriceState>({ price: null, loading: true, error: null });
+  const [state, setState] = useState<PriceValueState>({ price: null, loading: true, error: null });
 
   useEffect(() => {
     const controller = new AbortController();
@@ -14,14 +15,14 @@ export function usePrice(): PriceState {
       try {
         const response = await fetch("/api/price", { signal: controller.signal, cache: "no-store" });
         const data = await response.json();
-        if (!response.ok || data?.ok === false) throw new Error(data?.error || "No pudimos obtener el precio.");
+        if (!response.ok || data?.ok === false) throw new Error("No pudimos conectar con el servicio de reservas. Intentá nuevamente.");
         const rawPrice = data?.price ?? data?.data?.price ?? null;
         const price = rawPrice === null ? null : Number(rawPrice);
         if (price !== null && !Number.isFinite(price)) throw new Error("El precio recibido no es válido.");
         setState({ price, loading: false, error: null });
       } catch (error) {
         if (error instanceof DOMException && error.name === "AbortError") return;
-        setState({ price: null, loading: false, error: error instanceof Error ? error.message : "Error de red." });
+        setState({ price: null, loading: false, error: error instanceof Error ? error.message : "No pudimos conectar con el servicio de reservas. Intentá nuevamente." });
       }
     }
 
@@ -29,5 +30,5 @@ export function usePrice(): PriceState {
     return () => controller.abort();
   }, []);
 
-  return state;
+  return { ...state, updatePrice: (price) => setState({ price, loading: false, error: null }) };
 }

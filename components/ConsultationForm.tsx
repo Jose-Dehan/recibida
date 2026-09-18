@@ -2,16 +2,16 @@
 
 import { useState } from "react";
 import { AlertCircle, ArrowRight, Search } from "lucide-react";
-import type { PublicReservationStatus, ReservationLookupReason, ReservationLookupResponse } from "@/types";
+import type { BackendReservation, ReservationLookupReason, ReservationLookupResponse, ReservationStatus } from "@/types";
 import { PrimaryButton } from "./Buttons";
 import { ReservationStatusCard } from "./ReservationStatusCard";
 
-function normalizeStatus(value: unknown): PublicReservationStatus | null {
+function normalizeStatus(value: unknown): ReservationStatus | null {
   const status = String(value ?? "").trim().toLowerCase();
-  if (["pending", "pendiente"].includes(status)) return "pending";
-  if (["approved", "aprobado", "verified", "verificado"].includes(status)) return "approved";
-  if (["rejected", "rechazado"].includes(status)) return "rejected";
-  if (["expired", "vencido"].includes(status)) return "expired";
+  if (["pending", "pendiente"].includes(status)) return "Pendiente";
+  if (["approved", "aprobado", "verified", "verificado"].includes(status)) return "Aprobado";
+  if (["rejected", "rechazado"].includes(status)) return "Rechazado";
+  if (["expired", "vencido"].includes(status)) return "Vencido";
   return null;
 }
 
@@ -31,7 +31,7 @@ function isLookupReason(value: unknown): value is ReservationLookupReason {
 }
 
 export function ConsultationForm() {
-  const [result, setResult] = useState<PublicReservationStatus | null>(null);
+  const [result, setResult] = useState<{ status: ReservationStatus; reservation: BackendReservation } | null>(null);
   const [lookupFailure, setLookupFailure] = useState<ReservationLookupReason | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -40,11 +40,11 @@ export function ConsultationForm() {
     const form = new FormData(event.currentTarget);
     const dni = String(form.get("dni") ?? "").replace(/\D/g, "");
     const codigo = String(form.get("code") ?? "").trim().toUpperCase();
-    if (!/^\d{7,8}$/.test(dni) || !codigo) { setError("Ingresá un DNI y un código de reserva válidos."); setLoading(false); return; }
+    if (!/^\d{7,8}$/.test(dni) || /^0+$/.test(dni) || !codigo) { setError("Ingresá un DNI y un código de reserva válidos."); setLoading(false); return; }
     try {
       const response = await fetch(`/api/reservations?dni=${encodeURIComponent(dni)}&codigo=${encodeURIComponent(codigo)}`, { cache: "no-store" });
       const data = (await response.json()) as ReservationLookupResponse;
-      if (data.ok && data.found === false && isLookupReason(data.reason)) {
+      if (data.found === false && isLookupReason(data.reason)) {
         setLookupFailure(data.reason);
         return;
       }
@@ -58,7 +58,7 @@ export function ConsultationForm() {
       }
       const status = normalizeStatus(data?.reservation?.status ?? data?.status);
       if (!status) throw new Error("No pudimos consultar la reserva. Intentá nuevamente.");
-      setResult(status);
+      setResult({ status, reservation: { ...data.reservation, code: data.reservation?.code || codigo, dni: data.reservation?.dni || dni, name: data.reservation?.name || "", price: Number(data.reservation?.price) } });
     } catch { setError("No pudimos consultar la reserva. Intentá nuevamente."); }
     finally { setLoading(false); }
   }
@@ -78,7 +78,7 @@ export function ConsultationForm() {
           <p className="mt-2 text-sm leading-6 text-red-100/65">{lookupFailureContent[lookupFailure].description}</p>
         </section>
       )}
-      {result && <div className="mt-7"><ReservationStatusCard status={result} /></div>}
+      {result && <div className="mt-7"><ReservationStatusCard status={result.status} reservation={result.reservation} /></div>}
     </div>
   );
 }

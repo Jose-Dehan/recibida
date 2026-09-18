@@ -21,7 +21,7 @@ function isValidEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
-export function ReservationForm({ price }: { price: number }) {
+export function ReservationForm({ price, onPriceChange }: { price: number; onPriceChange: (price: number) => void }) {
   const [values, setValues] = useState(initialValues);
   const [open, setOpen] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
@@ -42,6 +42,7 @@ export function ReservationForm({ price }: { price: number }) {
 
     if (!values.name.trim()) nextErrors.name = "Ingresá tu nombre y apellido.";
     if (!/^\d{7,8}$/.test(dni)) nextErrors.dni = "Ingresá un DNI de 7 u 8 números.";
+    else if (/^0+$/.test(dni)) nextErrors.dni = "Ingresá un DNI válido.";
     if (!isValidEmail(email)) nextErrors.email = "Ingresá un email con formato válido.";
     if (!confirmEmail) nextErrors.confirmEmail = "Volvé a ingresar tu email.";
     else if (email !== confirmEmail) nextErrors.confirmEmail = "Los emails no coinciden.";
@@ -101,7 +102,7 @@ export function ReservationForm({ price }: { price: number }) {
         </label>
         <PrimaryButton type="submit"><span className="flex w-full items-center justify-between"><span>Continuar con la compra</span><ArrowRight aria-hidden="true" className="h-5 w-5" /></span></PrimaryButton>
       </form>
-      <ConfirmationBottomSheet open={open} values={values} price={price} onClose={() => setOpen(false)} />
+      <ConfirmationBottomSheet open={open} values={values} price={price} onPriceChange={onPriceChange} onClose={() => setOpen(false)} />
     </>
   );
 }
