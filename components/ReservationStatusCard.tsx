@@ -49,11 +49,11 @@ function ApprovedReservation({ reservation }: { reservation: BackendReservation 
 function ExpiredReservation() {
   return <>
     <StatusPanel icon={TriangleAlert} title="Reserva vencida" style="border-amber-400/25 bg-amber-400/[0.07] text-amber-200" glow="via-amber-300/55">
-      <p className="mt-2 text-sm leading-6 text-current opacity-65">El plazo de pago de esta reserva venció.</p>
-      <p className="mt-2 text-sm leading-6 text-current opacity-65">Podés volver a comprar una entrada.</p>
+      <p className="mt-2 text-sm leading-6 text-current opacity-65">Transcurrió el plazo para confirmar tu pago.</p>
+      <p className="mt-2 text-sm leading-6 text-current opacity-65">Podés realizar nuevamente la reserva al precio actual.</p>
     </StatusPanel>
     <Link href="/reservar" className="mt-4 flex min-h-[58px] items-center justify-center rounded-[20px] bg-accent px-5 text-center text-[15px] font-extrabold text-[#090b07]">Comprar otra entrada</Link>
-    <p className="mt-4 text-center text-sm leading-6 text-zinc-400">Si necesitás ayuda, escribinos a <a className="font-semibold text-accent underline underline-offset-2" href={`mailto:${contactEmail}`}>{contactEmail}</a></p>
+    <p className="mt-4 text-center text-sm leading-6 text-zinc-400">Cualquier consulta, escribinos a <a className="font-semibold text-accent underline underline-offset-2" href={`mailto:${contactEmail}`}>{contactEmail}</a></p>
   </>;
 }
 
