@@ -5,6 +5,8 @@ export type ReservationStatus =
   | "rejected"
   | "cancelled";
 
+export type PublicReservationStatus = "pending" | "approved" | "rejected";
+
 export type Reservation = {
   code: string;
   name: string;

@@ -1,20 +1,27 @@
-import type { ReservationStatus } from "@/types";
-import { StatusBadge } from "./StatusBadge";
+import type { PublicReservationStatus } from "@/types";
 
-const messages: Record<ReservationStatus, string> = {
-  pending: "Pago pendiente de validación.",
-  verified: "✓ ENTRADA CONFIRMADA",
-  expired: "Tu reserva venció.",
-  rejected: "El pago no pudo ser validado.",
-  cancelled: "La reserva fue cancelada.",
+const statusContent: Record<PublicReservationStatus, { title: string; description: string }> = {
+  pending: {
+    title: "Pago pendiente de validación",
+    description: "Recibimos tu reserva. Todavía estamos verificando el pago.",
+  },
+  approved: {
+    title: "✓ Entrada confirmada",
+    description: "Tu pago fue verificado correctamente.",
+  },
+  rejected: {
+    title: "Pago no validado",
+    description: "No pudimos validar el pago. Contactanos si creés que hubo un error.",
+  },
 };
 
-export function ReservationStatusCard({ status }: { status: ReservationStatus }) {
+export function ReservationStatusCard({ status }: { status: PublicReservationStatus }) {
+  const content = statusContent[status];
+
   return (
     <section className="rounded-2xl border border-line bg-panel p-5" aria-live="polite">
-      <StatusBadge status={status} />
-      <p className={`mt-4 text-xl font-black ${status === "verified" ? "text-accent" : "text-white"}`}>{messages[status]}</p>
-      <p className="mt-2 text-sm leading-6 text-zinc-400">Código: FIESTA-A7K92 · Juan Pérez</p>
+      <p className={`text-xl font-black ${status === "approved" ? "text-accent" : "text-white"}`}>{content.title}</p>
+      <p className="mt-2 text-sm leading-6 text-zinc-400">{content.description}</p>
     </section>
   );
 }
