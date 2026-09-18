@@ -3,15 +3,15 @@ import { EventLocationCard } from "./EventLocationCard";
 
 const statusContent: Record<PublicReservationStatus, { title: string; description: string }> = {
   pending: {
-    title: "Pago pendiente de validación",
+    title: "Pendiente",
     description: "Recibimos tu reserva. Todavía estamos verificando el pago.",
   },
   approved: {
-    title: "✓ Entrada confirmada",
+    title: "Aprobado",
     description: "Tu pago fue verificado correctamente.",
   },
   rejected: {
-    title: "Pago no validado",
+    title: "Rechazado",
     description: "No pudimos validar el pago. Contactanos si creés que hubo un error.",
   },
 };

@@ -6,7 +6,7 @@ import { PrimaryButton } from "./Buttons";
 import { ConfirmationBottomSheet } from "./ConfirmationBottomSheet";
 
 const initialValues: ReservationFormValues = { name: "", dni: "", email: "", confirmEmail: "", gender: "" };
-type FormErrors = Partial<Record<"dni" | "email" | "confirmEmail", string>>;
+type FormErrors = Partial<Record<"name" | "dni" | "email" | "confirmEmail" | "gender", string>>;
 
 function normalizeDni(value: string) {
   return value.replace(/\D/g, "");
@@ -27,7 +27,7 @@ export function ReservationForm({ price }: { price: number }) {
 
   function update(field: keyof ReservationFormValues, value: string) {
     setValues((current) => ({ ...current, [field]: value }));
-    if (field === "dni" || field === "email" || field === "confirmEmail") {
+    if (field === "name" || field === "dni" || field === "email" || field === "confirmEmail" || field === "gender") {
       setErrors((current) => ({ ...current, [field]: undefined }));
     }
   }
@@ -39,10 +39,12 @@ export function ReservationForm({ price }: { price: number }) {
     const confirmEmail = normalizeEmail(values.confirmEmail);
     const nextErrors: FormErrors = {};
 
+    if (!values.name.trim()) nextErrors.name = "Ingresá tu nombre y apellido.";
     if (!/^\d{7,8}$/.test(dni)) nextErrors.dni = "Ingresá un DNI de 7 u 8 números.";
     if (!isValidEmail(email)) nextErrors.email = "Ingresá un email con formato válido.";
     if (!confirmEmail) nextErrors.confirmEmail = "Volvé a ingresar tu email.";
     else if (email !== confirmEmail) nextErrors.confirmEmail = "Los emails no coinciden.";
+    if (!values.gender) nextErrors.gender = "Seleccioná una opción.";
 
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
@@ -56,11 +58,12 @@ export function ReservationForm({ price }: { price: number }) {
       <form className="space-y-5" onSubmit={submit} noValidate>
         <label className="block">
           <span className="mb-2 block text-sm font-semibold text-zinc-200">Nombre y apellido</span>
-          <input className="field" name="name" autoComplete="name" required value={values.name} onChange={(e) => update("name", e.target.value)} placeholder="Ej. Juan Pérez" />
+          <input className="field" name="name" autoComplete="name" required value={values.name} onChange={(e) => update("name", e.target.value)} placeholder="Nombre y apellido" aria-invalid={Boolean(errors.name)} />
+          {errors.name && <p className="mt-2 text-sm text-red-300" role="alert">{errors.name}</p>}
         </label>
         <label className="block">
           <span className="mb-2 block text-sm font-semibold text-zinc-200">DNI</span>
-          <input className="field" name="dni" inputMode="numeric" autoComplete="off" required value={values.dni} onChange={(e) => update("dni", e.target.value.replace(/[^\d.]/g, ""))} placeholder="Ej. 45.123.456" aria-invalid={Boolean(errors.dni)} aria-describedby={errors.dni ? "dni-error" : undefined} />
+          <input className="field" name="dni" inputMode="numeric" autoComplete="off" required value={values.dni} onChange={(e) => update("dni", e.target.value.replace(/[^\d.]/g, ""))} placeholder="Ingresá tu DNI" aria-invalid={Boolean(errors.dni)} aria-describedby={errors.dni ? "dni-error" : undefined} />
           {errors.dni && <p id="dni-error" className="mt-2 text-sm text-red-300" role="alert">{errors.dni}</p>}
         </label>
         <label className="block">
@@ -80,6 +83,7 @@ export function ReservationForm({ price }: { price: number }) {
             <option value="Hombre">Hombre</option>
             <option value="Mujer">Mujer</option>
           </select>
+          {errors.gender && <p className="mt-2 text-sm text-red-300" role="alert">{errors.gender}</p>}
         </label>
         <PrimaryButton type="submit">Continuar con la compra</PrimaryButton>
       </form>

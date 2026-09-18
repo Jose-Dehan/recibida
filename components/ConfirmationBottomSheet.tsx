@@ -2,13 +2,49 @@
 
 import { useRouter } from "next/navigation";
 import { formatPrice } from "@/lib/format";
-import { mockReservationCode } from "@/lib/mock-data";
-import type { ReservationFormValues } from "@/types";
+import type { CreateReservationResponse, ReservationFormValues } from "@/types";
 import { PrimaryButton, SecondaryButton } from "./Buttons";
+import { useState } from "react";
+
+const errorMessages: Record<string, string> = {
+  ACTIVE_RESERVATION_EXISTS: "Ya existe una reserva activa para este DNI.",
+  SOLD_OUT: "Las entradas están agotadas.",
+  INVALID_DATA: "Revisá los datos ingresados e intentá nuevamente.",
+};
 
 export function ConfirmationBottomSheet({ open, values, price, onClose }: { open: boolean; values: ReservationFormValues; price: number; onClose: () => void }) {
   const router = useRouter();
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   if (!open) return null;
+
+  async function confirm() {
+    setSubmitting(true);
+    setError(null);
+    try {
+      const response = await fetch("/api/reservations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ genero: values.gender, nombre: values.name.trim(), dni: values.dni, email: values.email }),
+      });
+      const data = (await response.json()) as CreateReservationResponse;
+      const reservation = data.reservation;
+      const validReservation = reservation
+        && typeof reservation.name === "string" && reservation.name.trim()
+        && typeof reservation.dni === "string" && reservation.dni.trim()
+        && typeof reservation.code === "string" && reservation.code.trim()
+        && Number.isFinite(Number(reservation.price))
+        && typeof reservation.expiresAt === "string" && reservation.expiresAt.trim();
+      if (!response.ok || !data.ok || !validReservation) {
+        throw new Error(errorMessages[data.code ?? ""] ?? data.error ?? "No pudimos crear la reserva.");
+      }
+      sessionStorage.setItem(`reservation:${reservation.code}`, JSON.stringify(data));
+      router.push(`/reserva/${encodeURIComponent(reservation.code)}`);
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : "Error de red. Intentá nuevamente.");
+      setSubmitting(false);
+    }
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/75 p-0 sm:items-center sm:p-5" role="dialog" aria-modal="true" aria-labelledby="confirmation-title" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
@@ -23,13 +59,11 @@ export function ConfirmationBottomSheet({ open, values, price, onClose }: { open
             </div>
           ))}
         </dl>
-        <div className="mt-5 space-y-2 text-sm leading-6 text-zinc-300">
-          <p>Tu entrada quedará reservada durante 5 días.</p>
-          <p>Tenés hasta el <strong className="text-white">22/09/2026</strong> para realizar la transferencia y enviar el comprobante.</p>
-        </div>
+        <p className="mt-5 text-sm leading-6 text-zinc-300">Al confirmar, te informaremos el vencimiento definido para tu reserva.</p>
+        {error && <p className="mt-4 rounded-xl border border-red-400/20 bg-red-400/[0.07] p-3 text-sm text-red-200" role="alert">{error}</p>}
         <div className="mt-6 space-y-3">
-          <PrimaryButton type="button" onClick={() => router.push(`/reserva/${mockReservationCode}`)}>Confirmar compra</PrimaryButton>
-          <SecondaryButton type="button" onClick={onClose}>Volver</SecondaryButton>
+          <PrimaryButton type="button" disabled={submitting} onClick={confirm}>{submitting ? "Creando reserva…" : "Confirmar compra"}</PrimaryButton>
+          <SecondaryButton type="button" disabled={submitting} onClick={onClose}>Volver</SecondaryButton>
         </div>
       </section>
     </div>
