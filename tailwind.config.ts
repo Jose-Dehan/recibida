@@ -8,13 +8,14 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#09090b",
-        panel: "#18181b",
-        line: "#303036",
-        accent: "#d9ff43",
+        ink: "#0a0a0c",
+        panel: "#151518",
+        line: "#2b2b31",
+        accent: "#d6f36a",
       },
       boxShadow: {
-        sheet: "0 -16px 50px rgba(0,0,0,.5)",
+        card: "0 18px 50px rgba(0,0,0,.18)",
+        sheet: "0 -20px 60px rgba(0,0,0,.5)",
       },
     },
   },

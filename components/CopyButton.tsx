@@ -15,5 +15,5 @@ export function CopyButton({ value, label }: { value: string; label: string }) {
     }
   }
 
-  return <button type="button" onClick={copy} className="min-h-12 rounded-xl border border-line bg-zinc-900 px-4 text-xs font-extrabold uppercase tracking-wide outline-none hover:border-zinc-500 focus-visible:ring-2 focus-visible:ring-accent" aria-live="polite">{copied ? "Copiado" : label}</button>;
+  return <button type="button" onClick={copy} className="min-h-10 rounded-xl border border-line/80 bg-[#101013] px-3.5 text-xs font-semibold text-zinc-400 outline-none transition-colors hover:border-zinc-600 hover:text-white focus-visible:ring-2 focus-visible:ring-accent" aria-live="polite">{copied ? "Copiado" : label}</button>;
 }

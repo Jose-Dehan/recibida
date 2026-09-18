@@ -2,9 +2,12 @@ import { formatPrice } from "@/lib/format";
 
 export function CurrentPriceCard({ price, compact = false }: { price: number; compact?: boolean }) {
   return (
-    <section className={`rounded-2xl border border-line bg-panel ${compact ? "p-5" : "p-6"}`}>
-      <p className="eyebrow">Precio actual</p>
-      <p className={`${compact ? "mt-2 text-3xl" : "mt-3 text-5xl"} font-black tracking-tight`}>{formatPrice(price)}</p>
+    <section className="relative overflow-hidden rounded-[20px] border border-line/80 bg-[#141416] px-5 py-4 shadow-card">
+      <div className="absolute -right-10 -top-12 h-28 w-28 rounded-full bg-accent/[0.035] blur-2xl" />
+      <div className="relative flex items-end justify-between gap-4">
+        <div><p className="text-sm font-medium text-zinc-400">Entrada actual</p><p className={`${compact ? "mt-1 text-[2rem]" : "mt-1.5 text-[2.35rem]"} font-extrabold leading-none tracking-[-0.045em]`}>{formatPrice(price)}</p></div>
+        <span className="mb-0.5 shrink-0 rounded-full border border-line bg-[#101012] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">Precio vigente</span>
+      </div>
     </section>
   );
 }

@@ -2,15 +2,16 @@ import { PrimaryButton, SecondaryButton } from "@/components/Buttons";
 import { CurrentPriceCard } from "@/components/CurrentPriceCard";
 import { EventHeader } from "@/components/EventHeader";
 import { MobilePageContainer } from "@/components/MobilePageContainer";
-import { currentPrice } from "@/lib/mock-data";
+import { getCurrentPrice } from "@/lib/pricing";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const currentPrice = await getCurrentPrice();
+
   return (
-    <MobilePageContainer className="flex flex-col justify-center py-12">
+    <MobilePageContainer className="py-10 sm:py-14">
       <EventHeader />
-      <div className="mt-10"><CurrentPriceCard price={currentPrice} /></div>
-      <div className="mt-6 space-y-3"><PrimaryButton href="/reservar">Reservar entrada</PrimaryButton><SecondaryButton href="/consulta">Consultar mi entrada</SecondaryButton></div>
-      <p className="mt-7 text-sm leading-6 text-zinc-400">Tu entrada queda reservada durante 5 días.<br />Luego transferí y enviá el comprobante por WhatsApp.</p>
+      <div className="mt-7"><CurrentPriceCard price={currentPrice} /></div>
+      <div className="mt-4 space-y-2.5"><PrimaryButton href="/reservar">Comprar entrada</PrimaryButton><SecondaryButton href="/consulta">Consultar mi entrada</SecondaryButton></div>
     </MobilePageContainer>
   );
 }

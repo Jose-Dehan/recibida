@@ -3,13 +3,13 @@ import { CopyButton } from "./CopyButton";
 
 export function PaymentDetailsCard() {
   return (
-    <section className="rounded-2xl border border-line bg-panel p-5">
-      <h2 className="text-lg font-black">Datos de transferencia</h2>
-      <dl className="mt-5 space-y-5">
-        <div><dt className="text-sm text-zinc-400">Alias:</dt><dd className="mt-1 text-xl font-black tracking-wide">{alias}</dd></div>
-        <div><dt className="text-sm text-zinc-400">Titular:</dt><dd className="mt-1 font-bold">{paymentOwner}</dd></div>
+    <section className="rounded-[20px] border border-line/80 bg-[#141416] p-5 shadow-card">
+      <h2 className="text-lg font-bold">Datos para transferir</h2>
+      <dl className="mt-4 grid grid-cols-1 gap-4 border-t border-line/70 pt-4 sm:grid-cols-2">
+        <div><dt className="text-sm text-zinc-500">Alias</dt><dd className="mt-1 text-xl font-bold tracking-wide">{alias}</dd></div>
+        <div><dt className="text-sm text-zinc-500">Titular</dt><dd className="mt-1 font-semibold">{paymentOwner}</dd></div>
       </dl>
-      <div className="mt-5"><CopyButton value={alias} label="Copiar alias" /></div>
+      <div className="mt-4"><CopyButton value={alias} label="Copiar alias" /></div>
     </section>
   );
 }

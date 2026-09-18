@@ -18,7 +18,7 @@ export function AdminDashboard() {
   return (
     <section className="mt-8">
       <label className="block"><span className="sr-only">Buscar reservas</span><input className="field" type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Buscar por nombre, DNI o código" /></label>
-      <div className="mt-4 flex flex-wrap gap-2" aria-label="Filtrar reservas">{filters.map(({ value, label }) => <button key={value} type="button" onClick={() => setFilter(value)} className={`min-h-12 rounded-xl border px-4 text-sm font-bold outline-none focus-visible:ring-2 focus-visible:ring-accent ${filter === value ? "border-accent bg-accent text-ink" : "border-line bg-panel text-zinc-300"}`}>{label}</button>)}</div>
+      <div className="mt-4 flex flex-wrap gap-2" aria-label="Filtrar reservas">{filters.map(({ value, label }) => <button key={value} type="button" onClick={() => setFilter(value)} className={`min-h-[52px] rounded-2xl border px-4 text-sm font-semibold outline-none focus-visible:ring-2 focus-visible:ring-accent ${filter === value ? "border-accent bg-accent text-ink" : "border-line bg-panel text-zinc-300"}`}>{label}</button>)}</div>
       <div className="mt-5 grid gap-3 sm:grid-cols-2">{visible.map((reservation) => <MobileReservationCard key={reservation.code} reservation={reservation} />)}</div>
       {visible.length === 0 && <p className="mt-8 text-center text-sm text-zinc-400">No hay reservas que coincidan.</p>}
     </section>

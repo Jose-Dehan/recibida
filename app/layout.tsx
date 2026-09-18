@@ -1,9 +1,10 @@
 import type { Metadata, Viewport } from "next";
+import { eventName } from "@/lib/event-data";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Noche Palermo | Entradas",
-  description: "Reservá tu entrada para Noche Palermo.",
+  title: `${eventName} | Entradas`,
+  description: `Comprá tu entrada para ${eventName}.`,
 };
 
 export const viewport: Viewport = {

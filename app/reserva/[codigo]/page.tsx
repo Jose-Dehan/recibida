@@ -1,20 +1,20 @@
 import { MobilePageContainer } from "@/components/MobilePageContainer";
+import { EventLocationCard } from "@/components/EventLocationCard";
 import { PaymentDetailsCard } from "@/components/PaymentDetailsCard";
 import { ReservationSummaryCard } from "@/components/ReservationSummaryCard";
-import { mockReservation, whatsappNumber } from "@/lib/mock-data";
+import { mockReservation, whatsappDisplayNumber, whatsappNumber } from "@/lib/mock-data";
 
 export default function ReservationPage() {
   const message = `Hola, envío el comprobante de mi entrada.\n\nNombre: ${mockReservation.name}\nDNI: ${mockReservation.dni}\nCódigo de reserva: ${mockReservation.code}`;
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
   return (
     <MobilePageContainer>
-      <p className="text-sm font-black uppercase tracking-[0.15em] text-accent">✓ Reserva realizada</p>
-      <h1 className="mt-3 text-3xl font-black tracking-tight">Tu entrada fue reservada</h1>
-      <div className="mt-7 space-y-4"><ReservationSummaryCard reservation={mockReservation} /><PaymentDetailsCard /></div>
-      <p className="mt-6 text-sm leading-6 text-zinc-300">Realizá la transferencia y enviá el comprobante por WhatsApp junto con tu nombre y DNI.</p>
-      <a href={whatsappUrl} target="_blank" rel="noreferrer" className="mt-5 flex min-h-12 w-full items-center justify-center rounded-xl bg-accent px-4 text-center text-sm font-extrabold uppercase tracking-wide text-ink outline-none hover:bg-accent/90 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-ink">Enviar comprobante por WhatsApp</a>
-      <div className="mt-6 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 text-sm leading-6 text-amber-100"><strong className="block">Tu entrada todavía no está confirmada.</strong>Queda pendiente hasta que validemos el pago.</div>
-      <p className="mt-5 text-center text-sm text-zinc-400">Te enviamos el código de reserva por email.</p>
+      <div className="flex items-start justify-between gap-4"><div><p className="eyebrow">Listo, recibimos tus datos</p><h1 className="mt-2 text-[2rem] font-extrabold tracking-[-0.035em]">Compra registrada</h1></div><span className="mt-1 shrink-0 rounded-full border border-amber-400/20 bg-amber-400/[0.08] px-3 py-1.5 text-xs font-semibold text-amber-200">Pendiente</span></div>
+      <div className="mt-6 space-y-3"><ReservationSummaryCard reservation={mockReservation} /><PaymentDetailsCard /></div>
+      <div className="mt-6 text-center"><p className="text-sm text-zinc-500">Enviá el comprobante al</p><p className="mt-1.5 text-xl font-bold tracking-wide">{whatsappDisplayNumber}</p></div>
+      <a href={whatsappUrl} target="_blank" rel="noreferrer" className="mt-5 flex min-h-[52px] w-full items-center justify-center rounded-2xl bg-accent px-4 text-center text-[15px] font-bold text-ink shadow-[0_10px_30px_rgba(214,243,106,0.08)] outline-none transition-colors hover:bg-[#def77f] focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-ink">Enviar comprobante por WhatsApp</a>
+      <div className="mt-6"><EventLocationCard /></div>
+      <div className="mt-6 rounded-[20px] border border-line bg-[#111114] p-5 text-sm leading-6 text-zinc-400"><p className="font-semibold text-zinc-200">Esperamos tu comprobante durante 5 días.</p><p className="mt-1">La entrada se confirma cuando validamos el pago.</p></div>
     </MobilePageContainer>
   );
 }

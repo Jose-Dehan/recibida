@@ -1,4 +1,5 @@
 import type { PublicReservationStatus } from "@/types";
+import { EventLocationCard } from "./EventLocationCard";
 
 const statusContent: Record<PublicReservationStatus, { title: string; description: string }> = {
   pending: {
@@ -15,13 +16,22 @@ const statusContent: Record<PublicReservationStatus, { title: string; descriptio
   },
 };
 
+const statusStyles: Record<PublicReservationStatus, string> = {
+  pending: "border-amber-400/20 bg-amber-400/[0.07] text-amber-200",
+  approved: "border-emerald-400/20 bg-emerald-400/[0.07] text-emerald-300",
+  rejected: "border-red-400/20 bg-red-400/[0.07] text-red-200",
+};
+
 export function ReservationStatusCard({ status }: { status: PublicReservationStatus }) {
   const content = statusContent[status];
 
   return (
-    <section className="rounded-2xl border border-line bg-panel p-5" aria-live="polite">
-      <p className={`text-xl font-black ${status === "approved" ? "text-accent" : "text-white"}`}>{content.title}</p>
-      <p className="mt-2 text-sm leading-6 text-zinc-400">{content.description}</p>
-    </section>
+    <div aria-live="polite">
+      <section className={`rounded-[20px] border p-6 shadow-card ${statusStyles[status]}`}>
+        <p className="text-xl font-bold">{content.title}</p>
+        <p className="mt-2 text-sm leading-6 text-current opacity-80">{content.description}</p>
+      </section>
+      {status === "approved" && <div className="mt-4"><EventLocationCard confirmed /></div>}
+    </div>
   );
 }
