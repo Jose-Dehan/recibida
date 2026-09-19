@@ -119,7 +119,6 @@ export function ReceiptUploader({ dni, codigo, existingReceipt = false, onUpload
     {uploaded && <div className="mb-5 rounded-[18px] border border-accent/20 bg-accent/[0.065] p-4 text-accent" role="status">
       <div className="flex items-center gap-2.5 font-extrabold"><CheckCircle2 aria-hidden="true" className="h-5 w-5" />Comprobante recibido</div>
       <p className="mt-2 text-sm leading-6 text-zinc-300">Recibimos tu comprobante correctamente. Tu entrada continúa pendiente de validación.</p>
-      <p className="mt-1 text-xs leading-5 text-zinc-500">Podés reemplazar el comprobante mientras tu reserva siga pendiente.</p>
     </div>}
     <div className="flex items-start gap-3">
       <span className="rounded-xl border border-accent/20 bg-accent/[0.08] p-2.5 text-accent"><FileUp aria-hidden="true" className="h-5 w-5" /></span>
