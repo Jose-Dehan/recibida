@@ -32,6 +32,7 @@ export type BackendReservation = {
   dni: string;
   price: number;
   expiresAt?: string;
+  receiptUploaded?: boolean;
   email?: string;
   gender?: Gender;
   status?: ReservationStatus | string;
@@ -53,6 +54,18 @@ export type CreateReservationResponse = {
   error?: string;
   code?: CreateReservationErrorCode | string;
 };
+
+export type ReceiptUploadResponse =
+  | {
+      ok: true;
+      receiptUploaded: true;
+      code: "RECEIPT_UPLOADED";
+    }
+  | {
+      ok: false;
+      code: string;
+      error: string;
+    };
 
 export type ReservationFormValues = Pick<Reservation, "name" | "dni" | "email"> & {
   confirmEmail: string;

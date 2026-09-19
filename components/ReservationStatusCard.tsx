@@ -1,11 +1,13 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
-import { CircleCheck, CircleX, Clock3, TriangleAlert } from "lucide-react";
-import { whatsappNumber } from "@/lib/event-data";
-import { formatPrice } from "@/lib/format";
+import { CircleCheck, CircleX, Clock3, FileWarning, TriangleAlert } from "lucide-react";
 import type { BackendReservation, ReservationStatus } from "@/types";
 import { EventLocationCard } from "./EventLocationCard";
 import { PaymentDetailsCard } from "./PaymentDetailsCard";
 import { ReservationSummaryCard } from "./ReservationSummaryCard";
+import { ReceiptUploader } from "./ReceiptUploader";
 
 const contactEmail = "recibidaia@gmail.com";
 
@@ -19,17 +21,23 @@ function StatusPanel({ icon: Icon, title, children, style, glow }: { icon: typeo
 }
 
 function PendingReservation({ reservation }: { reservation: BackendReservation }) {
-  const complete = reservation.name && reservation.code && Number.isFinite(Number(reservation.price));
-  const message = `Hola, envío el comprobante de mi entrada.\n\nNombre: ${reservation.name}\nDNI: ${reservation.dni}\nCódigo de reserva: ${reservation.code}\nPrecio reservado: ${formatPrice(Number(reservation.price))}\n\nAdjunto el comprobante de transferencia.`;
+  const complete = reservation.name && reservation.dni && reservation.code && Number.isFinite(Number(reservation.price));
+  const [receiptUploaded, setReceiptUploaded] = useState(reservation.receiptUploaded === true);
 
   return <>
-    <StatusPanel icon={Clock3} title="Pendiente" style="border-amber-400/20 bg-amber-400/[0.07] text-amber-200" glow="via-amber-300/55">
-      <p className="mt-2 text-sm leading-6 text-current opacity-65">Recibimos tu reserva. Todavía falta validar el comprobante de pago.</p>
-    </StatusPanel>
+    {receiptUploaded ? (
+      <StatusPanel icon={CircleCheck} title="Comprobante recibido" style="border-emerald-400/20 bg-emerald-400/[0.07] text-emerald-300" glow="via-emerald-300/60">
+        <p className="mt-2 text-sm leading-6 text-current opacity-70">Recibimos tu comprobante. Tu entrada sigue pendiente de validación.</p>
+      </StatusPanel>
+    ) : (
+      <StatusPanel icon={FileWarning} title="Falta subir el comprobante" style="border-amber-300/25 bg-amber-300/[0.07] text-amber-200" glow="via-accent/60">
+        <p className="mt-2 text-sm leading-6 text-current opacity-70">Tu reserva está registrada, pero todavía falta que subas el comprobante de transferencia.</p>
+      </StatusPanel>
+    )}
     {complete && <div className="mt-4 space-y-4">
       <ReservationSummaryCard reservation={{ name: reservation.name, code: reservation.code, price: Number(reservation.price), expiresAt: reservation.expiresAt }} />
       <PaymentDetailsCard />
-      <a href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`} target="_blank" rel="noreferrer" className="flex min-h-[58px] items-center justify-center rounded-[20px] bg-accent px-5 text-center text-[15px] font-extrabold text-[#090b07]">Enviar comprobante por WhatsApp</a>
+      <ReceiptUploader dni={reservation.dni} codigo={reservation.code} existingReceipt={receiptUploaded} collapsed onUploaded={() => setReceiptUploaded(true)} />
     </div>}
   </>;
 }
