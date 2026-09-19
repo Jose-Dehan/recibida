@@ -68,7 +68,7 @@ function ExpiredReservation() {
 
 function RejectedReservation() {
   return <StatusPanel icon={CircleX} title="Reserva rechazada" style="border-red-400/30 bg-red-400/10 text-red-200" glow="via-red-300/55">
-    <p className="mt-2 text-sm leading-6 text-current opacity-65">Esta reserva fue rechazada y no permite generar una nueva compra con el mismo DNI.</p>
+    <p className="mt-2 text-sm leading-6 text-current opacity-65">Esta reserva fue rechazada.</p>
     <p className="mt-3 text-sm leading-6 text-current opacity-75">Si necesitás ayuda, escribinos a <a className="font-semibold underline underline-offset-2" href={`mailto:${contactEmail}`}>{contactEmail}</a></p>
   </StatusPanel>;
 }
