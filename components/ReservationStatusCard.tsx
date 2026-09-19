@@ -37,7 +37,7 @@ function PendingReservation({ reservation }: { reservation: BackendReservation }
     )}
     <div className="mt-4 space-y-4">
       {complete && <>
-        <ReservationSummaryCard reservation={{ name: reservation.name, code: reservation.code, price: Number(reservation.price), expiresAt: reservation.expiresAt }} />
+        <ReservationSummaryCard reservation={{ name: reservation.name, code: reservation.code, price: Number(reservation.price), expiresAt: reservation.expiresAt }} showCode={false} />
         <PaymentDetailsCard />
       </>}
       {canUploadReceipt && <ReceiptUploader dni={reservation.dni} codigo={reservation.code} existingReceipt={receiptUploaded} collapsed onUploaded={() => setReceiptUploaded(true)} />}
@@ -45,13 +45,12 @@ function PendingReservation({ reservation }: { reservation: BackendReservation }
   </>;
 }
 
-function ApprovedReservation({ reservation }: { reservation: BackendReservation }) {
+function ApprovedReservation() {
   return <>
     <StatusPanel icon={CircleCheck} title="Entrada aprobada" style="border-emerald-400/30 bg-emerald-400/10 text-emerald-300" glow="via-emerald-300/60">
       <p className="mt-2 text-sm leading-6 text-current opacity-65">Tu pago fue validado correctamente. Tu entrada está confirmada.</p>
     </StatusPanel>
     <div className="mt-4 space-y-4">
-      {reservation.code && <p className="glass-card p-5 text-sm text-zinc-400">Código de reserva <strong className="mt-2 block break-all font-mono text-xl tracking-wider text-accent">{reservation.code}</strong></p>}
       <EventLocationCard confirmed />
     </div>
   </>;
@@ -79,7 +78,7 @@ export function ReservationStatusCard({ status, reservation }: { status: Reserva
 
   return <div aria-live="polite">
     {status === "Pendiente" && <PendingReservation reservation={reservationWithStatus} />}
-    {status === "Aprobado" && <ApprovedReservation reservation={reservation} />}
+    {status === "Aprobado" && <ApprovedReservation />}
     {status === "Vencido" && <ExpiredReservation />}
     {status === "Rechazado" && <RejectedReservation />}
   </div>;
