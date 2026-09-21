@@ -1,6 +1,9 @@
 import { formatPrice } from "@/lib/format";
+import { getTierName } from "@/lib/pricing-tier";
 
 export function CurrentPriceCard({ price, compact = false, featured = false, loading = false, error = null }: { price: number | null; compact?: boolean; featured?: boolean; loading?: boolean; error?: string | null }) {
+  const tierName = getTierName(price);
+
   if (featured) {
     if (!loading && !error && price === null) {
       return (
@@ -25,9 +28,9 @@ export function CurrentPriceCard({ price, compact = false, featured = false, loa
               {loading ? "Cargando…" : error ? "No disponible" : formatPrice(price as number)}
             </p>
           </div>
-          {!loading && price !== null && (
+          {!loading && tierName && (
             <span className="mt-0.5 shrink-0 rounded-full border border-accent/30 bg-accent/[0.1] px-2.5 py-1.5 text-[9px] font-extrabold uppercase tracking-[0.13em] text-accent shadow-[0_0_20px_rgba(214,243,106,0.1)]">
-              Precio vigente
+              {tierName}
             </span>
           )}
         </div>
@@ -40,7 +43,7 @@ export function CurrentPriceCard({ price, compact = false, featured = false, loa
       <div className="absolute -right-10 -top-12 h-28 w-28 rounded-full bg-accent/[0.035] blur-2xl" />
       <div className="relative flex items-end justify-between gap-4">
         <div><p className="text-sm font-medium text-zinc-400">Entrada actual</p><p className={`${compact ? "mt-1 text-[2rem]" : "mt-1.5 text-[2.35rem]"} font-extrabold leading-none tracking-[-0.045em]`}>{loading ? "Cargando…" : error ? "No disponible" : price === null ? "Entradas agotadas" : formatPrice(price)}</p></div>
-        {!loading && price !== null && <span className="mb-0.5 shrink-0 rounded-full border border-line bg-[#101012] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">Precio vigente</span>}
+        {!loading && tierName && <span className="mb-0.5 shrink-0 rounded-full border border-line bg-[#101012] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">{tierName}</span>}
       </div>
     </section>
   );
