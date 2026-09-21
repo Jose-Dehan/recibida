@@ -16,7 +16,7 @@ export function usePrice(): PriceState {
         const response = await fetch("/api/price", { signal: controller.signal, cache: "no-store" });
         const data = await response.json();
         if (!response.ok || data?.ok === false) throw new Error("No pudimos conectar con el servicio de reservas. Intentá nuevamente.");
-        const rawPrice = data?.price ?? data?.data?.price ?? null;
+        const rawPrice = Object.prototype.hasOwnProperty.call(data, "price") ? data.price : data?.data?.price ?? null;
         const price = rawPrice === null ? null : Number(rawPrice);
         if (price !== null && !Number.isFinite(price)) throw new Error("El precio recibido no es válido.");
         setState({ price, loading: false, error: null });

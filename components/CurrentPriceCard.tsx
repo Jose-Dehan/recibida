@@ -2,6 +2,18 @@ import { formatPrice } from "@/lib/format";
 
 export function CurrentPriceCard({ price, compact = false, featured = false, loading = false, error = null }: { price: number | null; compact?: boolean; featured?: boolean; loading?: boolean; error?: string | null }) {
   if (featured) {
+    if (!loading && !error && price === null) {
+      return (
+        <section className="relative overflow-hidden rounded-[28px] border border-red-300/[0.16] bg-[linear-gradient(135deg,rgba(127,29,29,0.12),rgba(18,18,19,0.94)_48%,rgba(10,11,11,0.98))] px-6 py-7 shadow-[0_24px_70px_rgba(0,0,0,0.48)] backdrop-blur-xl sm:px-7">
+          <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-red-200/30 to-transparent" />
+          <div className="relative">
+            <h2 className="text-[clamp(2rem,10vw,3rem)] font-black leading-none tracking-[-0.05em] text-white">Entradas agotadas</h2>
+            <p className="mt-4 text-sm leading-6 text-zinc-300">Ya se alcanzó la capacidad máxima del evento.</p>
+          </div>
+        </section>
+      );
+    }
+
     return (
       <section className="group relative overflow-hidden rounded-[28px] border border-accent/25 bg-[linear-gradient(135deg,rgba(214,243,106,0.12),rgba(18,20,17,0.88)_42%,rgba(12,13,12,0.96))] px-6 py-6 shadow-[0_24px_70px_rgba(0,0,0,0.48),0_0_45px_rgba(214,243,106,0.08)] backdrop-blur-xl transition duration-300 hover:border-accent/40 hover:shadow-[0_24px_75px_rgba(0,0,0,0.48),0_0_55px_rgba(214,243,106,0.13)] sm:px-7 sm:py-7">
         <div className="absolute -right-12 -top-16 h-40 w-40 rounded-full bg-accent/[0.14] blur-3xl transition-transform duration-500 group-hover:scale-110" />
@@ -10,7 +22,7 @@ export function CurrentPriceCard({ price, compact = false, featured = false, loa
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-400">Entrada actual</p>
             <p className="mt-3 text-[clamp(2.8rem,14vw,4rem)] font-black leading-none tracking-[-0.065em] text-white [text-shadow:0_0_30px_rgba(255,255,255,0.08)]">
-              {loading ? "Cargando…" : error ? "No disponible" : price === null ? "Agotadas" : formatPrice(price)}
+              {loading ? "Cargando…" : error ? "No disponible" : formatPrice(price as number)}
             </p>
           </div>
           {!loading && price !== null && (
