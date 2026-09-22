@@ -12,7 +12,7 @@ import type { CreateReservationResponse } from "@/types";
 
 function formatExpiration(value: string) {
   const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? value : new Intl.DateTimeFormat("es-AR", { dateStyle: "short", timeStyle: "short" }).format(date);
+  return Number.isNaN(date.getTime()) ? value : new Intl.DateTimeFormat("es-AR", { day: "2-digit", month: "2-digit", year: "numeric" }).format(date);
 }
 
 export default function ReservationPage({ params }: { params: Promise<{ codigo: string }> }) {
