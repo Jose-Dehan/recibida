@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react";
 import { formatPrice } from "@/lib/format";
 import { getNextTierPrice, getTierName, LOW_STOCK_THRESHOLD } from "@/lib/pricing-tier";
 
@@ -26,10 +27,10 @@ export function CurrentPriceCard({ price, remainingInCurrentTier = null, compact
         <div className="relative">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-400">Entrada actual</p>
-            <p className="mt-3 text-[clamp(2.8rem,14vw,4rem)] font-black leading-none tracking-[-0.065em] text-white [text-shadow:0_0_30px_rgba(255,255,255,0.08)]">
-              {loading ? "Cargando…" : error ? "No disponible" : formatPrice(price as number)}
-            </p>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-400">Entrada actual</p>
+              <p className="mt-3 text-[clamp(2.8rem,14vw,4rem)] font-black leading-none tracking-[-0.065em] text-white [text-shadow:0_0_30px_rgba(255,255,255,0.08)]">
+                {loading ? "Cargando…" : error ? "No disponible" : formatPrice(price as number)}
+              </p>
             </div>
             {!loading && tierName && (
               <span className="mt-0.5 shrink-0 rounded-full border border-accent/30 bg-accent/[0.1] px-2.5 py-1.5 text-[9px] font-extrabold uppercase tracking-[0.13em] text-accent shadow-[0_0_20px_rgba(214,243,106,0.1)]">
@@ -41,10 +42,11 @@ export function CurrentPriceCard({ price, remainingInCurrentTier = null, compact
           {!loading && !error && price !== null && (nextTierPrice !== null || isLowStock) && (
             <div className="mt-5 flex flex-wrap items-end justify-between gap-3 border-t border-white/[0.08] pt-4">
               {nextTierPrice !== null && (
-                <div className="shrink-0">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500">Sube pronto</p>
-                  <p className="mt-1 text-xl font-black tracking-[-0.035em] text-zinc-100">{formatPrice(nextTierPrice)}</p>
-                </div>
+                <p className="flex shrink-0 items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-zinc-500">
+                  <span>Soon</span>
+                  <ArrowRight aria-hidden="true" className="h-3 w-3 text-accent/70" strokeWidth={2} />
+                  <span className="font-extrabold tracking-[-0.01em] text-zinc-300">{formatPrice(nextTierPrice)}</span>
+                </p>
               )}
               {isLowStock && (
                 <p className="rounded-full border border-amber-300/25 bg-amber-300/[0.08] px-3 py-2 text-[11px] font-extrabold tracking-[0.01em] text-amber-200 shadow-[0_0_22px_rgba(251,191,36,0.1)]">
