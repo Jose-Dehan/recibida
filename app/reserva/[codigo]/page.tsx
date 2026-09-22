@@ -2,6 +2,8 @@
 
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import { MobilePageContainer } from "@/components/MobilePageContainer";
 import { PaymentDetailsCard } from "@/components/PaymentDetailsCard";
 import { ReceiptUploader } from "@/components/ReceiptUploader";
@@ -15,8 +17,17 @@ function formatExpiration(value: string) {
   return Number.isNaN(date.getTime()) ? value : new Intl.DateTimeFormat("es-AR", { day: "2-digit", month: "2-digit", year: "numeric" }).format(date);
 }
 
+function HomeBackButton() {
+  return (
+    <Link href="/" aria-label="Volver al inicio" className="group mb-5 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/[0.09] bg-white/[0.035] text-zinc-400 outline-none transition hover:border-accent/25 hover:bg-accent/[0.06] hover:text-accent focus-visible:ring-2 focus-visible:ring-accent">
+      <ArrowLeft aria-hidden="true" className="h-5 w-5 transition-transform group-hover:-translate-x-0.5" strokeWidth={1.9} />
+    </Link>
+  );
+}
+
 export default function ReservationPage({ params }: { params: Promise<{ codigo: string }> }) {
   const { codigo } = use(params);
+  const router = useRouter();
   const [data, setData] = useState<CreateReservationResponse | null>(null);
 
   useEffect(() => {
@@ -28,7 +39,7 @@ export default function ReservationPage({ params }: { params: Promise<{ codigo: 
   }, [codigo]);
 
   if (!data?.reservation) {
-    return <MobilePageContainer><p className="eyebrow">Reserva registrada</p><h1 className="mt-2 text-[2rem] font-extrabold">Guardá tu código</h1><p className="mt-5 text-zinc-400">Por seguridad, los datos de esta reserva ya no están disponibles en este navegador. Consultá su estado con tu DNI y código.</p><Link href="/consulta" className="mt-6 flex min-h-14 items-center justify-center rounded-[17px] bg-accent px-5 font-bold text-ink">Consultar mi entrada</Link></MobilePageContainer>;
+    return <MobilePageContainer><HomeBackButton /><p className="eyebrow">Reserva registrada</p><h1 className="mt-2 text-[2rem] font-extrabold">Guardá tu código</h1><p className="mt-5 text-zinc-400">Por seguridad, los datos de esta reserva ya no están disponibles en este navegador. Consultá su estado con tu DNI y código.</p><Link href="/consulta" className="mt-6 flex min-h-14 items-center justify-center rounded-[17px] bg-accent px-5 font-bold text-ink">Consultar mi entrada</Link></MobilePageContainer>;
   }
 
   const backendReservation = data.reservation;
@@ -40,6 +51,7 @@ export default function ReservationPage({ params }: { params: Promise<{ codigo: 
   const canUploadReceipt = status === "Pendiente";
 
   return <MobilePageContainer>
+    <HomeBackButton />
     <div className="flex items-start justify-between gap-4"><div><p className="eyebrow">Listo, recibimos tus datos</p><h1 className="mt-2 text-[2rem] font-extrabold tracking-[-0.035em]">Compra registrada</h1></div><div className="mt-1 shrink-0"><StatusBadge status={status} /></div></div>
     <div className="mt-6 space-y-3"><ReservationSummaryCard reservation={reservation} showCode={false} /><PaymentDetailsCard /></div>
     <aside className="relative mt-4 overflow-hidden rounded-[22px] border border-accent/[0.16] bg-[linear-gradient(135deg,rgba(214,243,106,0.055),rgba(17,17,19,0.96)_48%)] p-5 shadow-[0_16px_45px_rgba(0,0,0,0.25),0_0_28px_rgba(214,243,106,0.035)]">
@@ -54,6 +66,6 @@ export default function ReservationPage({ params }: { params: Promise<{ codigo: 
         </div>
       </div>
     </aside>
-    {canUploadReceipt && <div className="mt-5"><ReceiptUploader dni={backendReservation.dni} codigo={backendReservation.code} existingReceipt={backendReservation.receiptUploaded === true} /></div>}
+    {canUploadReceipt && <div className="mt-5"><ReceiptUploader dni={backendReservation.dni} codigo={backendReservation.code} existingReceipt={backendReservation.receiptUploaded === true} onUploaded={() => router.push("/")} /></div>}
   </MobilePageContainer>;
 }
