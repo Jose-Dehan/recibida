@@ -42,9 +42,18 @@ export default function ReservationPage({ params }: { params: Promise<{ codigo: 
   return <MobilePageContainer>
     <div className="flex items-start justify-between gap-4"><div><p className="eyebrow">Listo, recibimos tus datos</p><h1 className="mt-2 text-[2rem] font-extrabold tracking-[-0.035em]">Compra registrada</h1></div><div className="mt-1 shrink-0"><StatusBadge status={status} /></div></div>
     <div className="mt-6 space-y-3"><ReservationSummaryCard reservation={reservation} /><PaymentDetailsCard /></div>
-    <p className={`mt-4 rounded-[20px] border p-4 text-sm ${data.emailSent !== false ? "border-emerald-400/20 bg-emerald-400/[0.07] text-emerald-200" : "border-amber-400/20 bg-amber-400/[0.07] text-amber-200"}`}>{data.emailSent !== false ? "Te enviamos el código de reserva a tu email. Si no lo encontrás, revisá la carpeta de spam." : "No pudimos enviar el email. Guardá este código de reserva."}</p>
-    <aside className="mt-4 rounded-[20px] border border-line/80 bg-[#111113] p-5 text-sm leading-6 text-zinc-400"><p className="font-semibold text-zinc-200">Guardá tu código de reserva</p><p className="mt-1">Para verificar el estado vas a necesitar tu DNI y el código. Podés hacerlo desde <Link href="/consulta" className="font-semibold text-accent underline decoration-accent/40 underline-offset-4">Consultar mi entrada</Link>.</p></aside>
+    <aside className="relative mt-4 overflow-hidden rounded-[22px] border border-accent/[0.16] bg-[linear-gradient(135deg,rgba(214,243,106,0.055),rgba(17,17,19,0.96)_48%)] p-5 shadow-[0_16px_45px_rgba(0,0,0,0.25),0_0_28px_rgba(214,243,106,0.035)]">
+      <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-accent/45 to-transparent" />
+      <div className="relative">
+        <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-accent">Importante</p>
+        <div className="mt-3 space-y-2 text-sm leading-6 text-zinc-400">
+          <p className={data.emailSent === false ? "text-amber-200" : "text-zinc-300"}>{data.emailSent !== false ? "Te enviamos el código de reserva a tu email. Si no lo encontrás, revisá la carpeta de spam." : "No pudimos enviar el email. Guardá este código de reserva."}</p>
+          <p>Guardá tu código de reserva. Lo vas a necesitar junto con tu DNI para <Link href="/consulta" className="font-semibold text-accent underline decoration-accent/40 underline-offset-4">consultar el estado de tu entrada</Link>.</p>
+          <p>Esperamos tu comprobante hasta el vencimiento indicado.</p>
+          <p className="font-semibold text-zinc-200">La entrada se confirma cuando validamos el pago.</p>
+        </div>
+      </div>
+    </aside>
     {canUploadReceipt && <div className="mt-5"><ReceiptUploader dni={backendReservation.dni} codigo={backendReservation.code} existingReceipt={backendReservation.receiptUploaded === true} /></div>}
-    <div className="mt-6 rounded-[20px] border border-line bg-[#111114] p-5 text-sm leading-6 text-zinc-400"><p className="font-semibold text-zinc-200">Esperamos tu comprobante hasta el vencimiento indicado.</p><p className="mt-1">La entrada se confirma cuando validamos el pago.</p></div>
   </MobilePageContainer>;
 }
