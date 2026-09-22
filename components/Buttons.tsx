@@ -1,10 +1,10 @@
 import Link from "next/link";
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 
-const base = "flex w-full items-center justify-center rounded-[20px] px-5 text-center text-[15px] font-extrabold outline-none transition duration-200 active:scale-[0.985] focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#050806] disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100";
+const base = "flex w-full items-center justify-center rounded-[18px] px-4 text-center text-[15px] font-extrabold outline-none transition duration-200 active:scale-[0.985] focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#050806] disabled:cursor-not-allowed disabled:opacity-50 disabled:active:scale-100 sm:rounded-[20px] sm:px-5";
 
 export function PrimaryButton({ href, children, ...props }: ButtonHTMLAttributes<HTMLButtonElement> & { href?: string; children: ReactNode }) {
-  const classes = `${base} min-h-[60px] bg-accent text-[#090b07] shadow-[0_12px_38px_rgba(214,243,106,0.18),0_0_22px_rgba(214,243,106,0.1)] hover:-translate-y-0.5 hover:bg-[#e1fa80] hover:shadow-[0_16px_44px_rgba(214,243,106,0.24)]`;
+  const classes = `${base} min-h-14 bg-accent text-[#090b07] shadow-[0_12px_38px_rgba(214,243,106,0.18),0_0_22px_rgba(214,243,106,0.1)] hover:-translate-y-0.5 hover:bg-[#e1fa80] hover:shadow-[0_16px_44px_rgba(214,243,106,0.24)] sm:min-h-[60px]`;
   return href ? <Link href={href} className={classes}>{children}</Link> : <button className={classes} {...props}>{children}</button>;
 }
 

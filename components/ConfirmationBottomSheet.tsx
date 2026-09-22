@@ -44,7 +44,7 @@ export function ConfirmationBottomSheet({ open, values, price, onPriceChange, on
   const special = outcome && outcome.kind !== "error";
   const title = outcome?.kind === "price" ? "El precio cambió" : outcome?.kind === "active" ? "Ya tenés una reserva activa" : outcome?.kind === "rejected" ? "Este DNI tiene una reserva rechazada" : outcome?.kind === "soldOut" ? "Entradas agotadas" : null;
   return <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/80 p-0 backdrop-blur-sm sm:items-center sm:p-5" role="dialog" aria-modal="true" aria-labelledby="confirmation-title" onMouseDown={(e) => { if (e.target === e.currentTarget && !submitting) close(); }}>
-    <section className="relative max-h-[92vh] w-full max-w-[430px] overflow-y-auto rounded-t-[28px] border border-white/[0.1] bg-[#0a0d0a]/95 p-6 shadow-[0_-24px_80px_rgba(0,0,0,0.65),0_0_45px_rgba(214,243,106,0.06)] backdrop-blur-2xl sm:rounded-[28px]">
+    <section className="relative max-h-[calc(100dvh-env(safe-area-inset-top))] w-full max-w-[430px] overflow-y-auto rounded-t-[24px] border border-white/[0.1] bg-[#0a0d0a]/95 px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-5 shadow-[0_-24px_80px_rgba(0,0,0,0.65),0_0_45px_rgba(214,243,106,0.06)] backdrop-blur-2xl sm:max-h-[92dvh] sm:rounded-[28px] sm:p-6">
       <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent" /><div className="mx-auto mb-5 h-1 w-12 rounded-full bg-zinc-700 sm:hidden" />
       {special ? <div aria-live="polite">
         <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-accent/70">Reserva</p><h2 id="confirmation-title" className="mt-2 text-[1.75rem] font-black tracking-[-0.04em]">{title}</h2>

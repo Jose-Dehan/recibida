@@ -19,8 +19,9 @@ function formatExpiration(value: string) {
 
 function HomeBackButton() {
   return (
-    <Link href="/" aria-label="Volver al inicio" className="group mb-5 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/[0.09] bg-white/[0.035] text-zinc-400 outline-none transition hover:border-accent/25 hover:bg-accent/[0.06] hover:text-accent focus-visible:ring-2 focus-visible:ring-accent">
+    <Link href="/" aria-label="Volver al inicio" className="group mb-4 inline-flex min-h-11 items-center gap-2 rounded-xl pr-3 text-sm font-semibold text-zinc-500 outline-none transition hover:text-accent focus-visible:ring-2 focus-visible:ring-accent sm:mb-5">
       <ArrowLeft aria-hidden="true" className="h-5 w-5 transition-transform group-hover:-translate-x-0.5" strokeWidth={1.9} />
+      Volver
     </Link>
   );
 }
@@ -49,7 +50,7 @@ export default function ReservationPage({ params }: { params: Promise<{ codigo: 
   if (uploadSuccess) {
     return (
       <MobilePageContainer>
-        <section className="relative mt-[12vh] overflow-hidden rounded-[28px] border border-accent/25 bg-[linear-gradient(145deg,rgba(214,243,106,0.1),rgba(17,18,17,0.97)_48%)] px-6 py-10 text-center shadow-[0_24px_70px_rgba(0,0,0,0.42),0_0_38px_rgba(214,243,106,0.08)] backdrop-blur-xl">
+        <section className="relative mt-8 overflow-hidden rounded-[24px] border border-accent/25 bg-[linear-gradient(145deg,rgba(214,243,106,0.1),rgba(17,18,17,0.97)_48%)] px-5 py-8 text-center shadow-[0_24px_70px_rgba(0,0,0,0.42),0_0_38px_rgba(214,243,106,0.08)] backdrop-blur-xl sm:mt-[12vh] sm:rounded-[28px] sm:px-6 sm:py-10">
           <div className="absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-accent/65 to-transparent" />
           <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full border border-accent/30 bg-accent/[0.1] text-accent shadow-[0_0_30px_rgba(214,243,106,0.16)]">
             <CheckCircle2 aria-hidden="true" className="h-8 w-8" strokeWidth={1.8} />
@@ -79,9 +80,9 @@ export default function ReservationPage({ params }: { params: Promise<{ codigo: 
 
   return <MobilePageContainer>
     <HomeBackButton />
-    <div className="flex items-start justify-between gap-4"><div><p className="eyebrow">Listo, recibimos tus datos</p><h1 className="mt-2 text-[2rem] font-extrabold tracking-[-0.035em]">Compra registrada</h1></div><div className="mt-1 shrink-0"><StatusBadge status={status} /></div></div>
-    <div className="mt-6 space-y-3"><ReservationSummaryCard reservation={reservation} /><PaymentDetailsCard /></div>
-    <aside className="relative mt-4 overflow-hidden rounded-[22px] border border-accent/[0.16] bg-[linear-gradient(135deg,rgba(214,243,106,0.055),rgba(17,17,19,0.96)_48%)] p-5 shadow-[0_16px_45px_rgba(0,0,0,0.25),0_0_28px_rgba(214,243,106,0.035)]">
+    <div className="flex flex-wrap items-start justify-between gap-3"><div className="min-w-0"><p className="eyebrow">Listo, recibimos tus datos</p><h1 className="mt-2 text-[clamp(1.8rem,9vw,2rem)] font-extrabold tracking-[-0.035em]">Compra registrada</h1></div><div className="shrink-0"><StatusBadge status={status} /></div></div>
+    <div className="mt-5 space-y-3 sm:mt-6"><ReservationSummaryCard reservation={reservation} /><PaymentDetailsCard /></div>
+    <aside className="relative mt-4 overflow-hidden rounded-[20px] border border-accent/[0.16] bg-[linear-gradient(135deg,rgba(214,243,106,0.055),rgba(17,17,19,0.96)_48%)] p-4 shadow-[0_16px_45px_rgba(0,0,0,0.25),0_0_28px_rgba(214,243,106,0.035)] sm:rounded-[22px] sm:p-5">
       <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-accent/45 to-transparent" />
       <div className="relative">
         <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-accent">Importante</p>

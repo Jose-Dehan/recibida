@@ -10,10 +10,10 @@ import { ReceiptUploader } from "./ReceiptUploader";
 const contactEmail = "recibidaia@gmail.com";
 
 function StatusPanel({ icon: Icon, title, children, style, glow }: { icon: typeof Clock3; title: string; children: React.ReactNode; style: string; glow: string }) {
-  return <section className={`relative overflow-hidden rounded-[24px] border bg-gradient-to-br from-current/[0.08] to-white/[0.025] p-5 shadow-[0_18px_50px_rgba(0,0,0,0.3)] backdrop-blur-xl ${style}`}>
+  return <section className={`relative overflow-hidden rounded-[20px] border bg-gradient-to-br from-current/[0.08] to-white/[0.025] p-4 shadow-[0_18px_50px_rgba(0,0,0,0.3)] backdrop-blur-xl sm:rounded-[24px] sm:p-5 ${style}`}>
     <div className={`absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent ${glow} to-transparent`} />
-    <Icon aria-hidden="true" className="mb-4 h-6 w-6" strokeWidth={1.7} />
-    <p className="text-xl font-extrabold tracking-tight">{title}</p>
+    <Icon aria-hidden="true" className="mb-3 h-6 w-6 sm:mb-4" strokeWidth={1.7} />
+    <p className="text-lg font-extrabold tracking-tight sm:text-xl">{title}</p>
     {children}
   </section>;
 }

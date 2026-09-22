@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 export function ExperienceShell({ children, centered = false }: { children: ReactNode; centered?: boolean }) {
   return (
-    <main className={`relative min-h-screen min-h-[100svh] overflow-x-hidden bg-[#050806] ${centered ? "px-4 py-5 min-[375px]:px-5 min-[390px]:py-6 sm:px-7 sm:py-10" : "px-5 py-7 sm:px-7 sm:py-11"}`}>
+    <main className={`safe-page relative min-h-screen min-h-[100dvh] overflow-x-hidden bg-[#050806] ${centered ? "px-4 min-[375px]:px-5 sm:px-7" : "px-4 min-[375px]:px-5 sm:px-7"}`}>
       <div aria-hidden="true" className="home-grid pointer-events-none fixed inset-0 opacity-35" />
       <div aria-hidden="true" className="home-orb pointer-events-none fixed -right-28 -top-20 h-72 w-72 rounded-full bg-accent/[0.11] blur-[90px]" />
       <div aria-hidden="true" className="home-orb home-orb-delayed pointer-events-none fixed -bottom-32 -left-32 h-80 w-80 rounded-full bg-accent/[0.07] blur-[110px]" />

@@ -106,15 +106,15 @@ export function ReceiptUploader({ dni, codigo, existingReceipt = false, onUpload
       type="button"
       onClick={() => setExpanded(true)}
       className={existingReceipt
-        ? "flex min-h-[54px] w-full items-center justify-center gap-2 rounded-[18px] border border-emerald-300/25 bg-emerald-300/[0.055] px-5 text-[15px] font-bold text-emerald-200 transition hover:border-emerald-300/45 hover:bg-emerald-300/[0.09]"
-        : "flex min-h-[56px] w-full items-center justify-center gap-2 rounded-[18px] bg-accent px-5 text-[15px] font-extrabold text-ink transition hover:brightness-105"}
+        ? "flex min-h-[54px] w-full items-center justify-center gap-2 rounded-[16px] border border-emerald-300/25 bg-emerald-300/[0.055] px-4 text-[15px] font-bold text-emerald-200 transition hover:border-emerald-300/45 hover:bg-emerald-300/[0.09] sm:rounded-[18px] sm:px-5"
+        : "flex min-h-[56px] w-full items-center justify-center gap-2 rounded-[16px] bg-accent px-4 text-[15px] font-extrabold text-ink transition hover:brightness-105 sm:rounded-[18px] sm:px-5"}
     >
       <FileUp aria-hidden="true" className="h-[18px] w-[18px]" />
       {existingReceipt ? "Reemplazar comprobante" : "Subir comprobante"}
     </button>;
   }
 
-  return <section className="glass-card relative overflow-hidden p-5">
+  return <section className="glass-card relative overflow-hidden p-4 sm:p-5">
     <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-accent/55 to-transparent" />
     {uploaded && <div className="mb-5 rounded-[18px] border border-accent/20 bg-accent/[0.065] p-4 text-accent" role="status">
       <div className="flex items-center gap-2.5 font-extrabold"><CheckCircle2 aria-hidden="true" className="h-5 w-5" />Comprobante recibido</div>
@@ -124,12 +124,12 @@ export function ReceiptUploader({ dni, codigo, existingReceipt = false, onUpload
       <span className="rounded-xl border border-accent/20 bg-accent/[0.08] p-2.5 text-accent"><FileUp aria-hidden="true" className="h-5 w-5" /></span>
       <div><h2 className="text-lg font-extrabold">Subí tu comprobante</h2><p className="mt-1 text-sm text-zinc-500">Formatos permitidos: JPG, PNG, WEBP o PDF.</p></div>
     </div>
-    <label htmlFor={inputId} className="mt-5 flex min-h-[58px] cursor-pointer items-center justify-center rounded-[18px] border border-dashed border-white/[0.16] bg-white/[0.035] px-4 text-center text-sm font-semibold text-zinc-300 transition hover:border-accent/45 hover:text-accent">
-      {file ? file.name : "Seleccionar archivo"}
+    <label htmlFor={inputId} className="mt-4 flex min-h-[58px] cursor-pointer items-center justify-center rounded-[16px] border border-dashed border-white/[0.16] bg-white/[0.035] px-3 text-center text-sm font-semibold text-zinc-300 transition hover:border-accent/45 hover:text-accent sm:mt-5 sm:rounded-[18px] sm:px-4">
+      <span className="max-w-full break-all">{file ? file.name : "Seleccionar archivo"}</span>
     </label>
     <input id={inputId} className="sr-only" type="file" accept="image/jpeg,image/png,image/webp,application/pdf" disabled={uploading} onChange={(event) => void selectFile(event.target.files?.[0])} />
     {error && <p className="mt-3 text-sm leading-5 text-red-300" role="alert">{error}</p>}
-    <button type="button" disabled={!file || uploading} onClick={() => void upload()} className="mt-4 flex min-h-[54px] w-full items-center justify-center gap-2 rounded-[18px] bg-accent px-5 text-[15px] font-extrabold text-ink transition disabled:cursor-not-allowed disabled:opacity-45">
+    <button type="button" disabled={!file || uploading} onClick={() => void upload()} className="mt-4 flex min-h-[54px] w-full items-center justify-center gap-2 rounded-[16px] bg-accent px-4 text-[15px] font-extrabold text-ink transition disabled:cursor-not-allowed disabled:opacity-45 sm:rounded-[18px] sm:px-5">
       {uploading && <LoaderCircle aria-hidden="true" className="h-4 w-4 animate-spin" />}{uploading ? "Subiendo comprobante..." : uploaded ? "Reemplazar comprobante" : "Subir comprobante"}
     </button>
   </section>;

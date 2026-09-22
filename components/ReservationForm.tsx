@@ -57,7 +57,7 @@ export function ReservationForm({ price, onPriceChange }: { price: number; onPri
 
   return (
     <>
-      <form className="space-y-5" onSubmit={submit} noValidate>
+      <form className="space-y-4 sm:space-y-5" onSubmit={submit} noValidate>
         <fieldset>
           <legend className="mb-2.5 text-sm font-semibold text-zinc-200">Género</legend>
           <input type="hidden" name="gender" value={values.gender} />
@@ -70,7 +70,7 @@ export function ReservationForm({ price, onPriceChange }: { price: number; onPri
                   type="button"
                   role="radio"
                   aria-checked={selected}
-                  className={`flex min-h-14 items-center justify-center gap-2 rounded-[18px] border text-sm font-bold outline-none transition duration-200 focus-visible:ring-2 focus-visible:ring-accent ${selected ? "border-accent/55 bg-accent/[0.12] text-accent shadow-[0_0_24px_rgba(214,243,106,0.08)]" : "border-white/[0.1] bg-white/[0.04] text-zinc-400 hover:border-white/[0.18] hover:text-zinc-200"}`}
+                  className={`flex min-h-[52px] items-center justify-center gap-2 rounded-[16px] border text-sm font-bold outline-none transition duration-200 focus-visible:ring-2 focus-visible:ring-accent sm:min-h-14 sm:rounded-[18px] ${selected ? "border-accent/55 bg-accent/[0.12] text-accent shadow-[0_0_24px_rgba(214,243,106,0.08)]" : "border-white/[0.1] bg-white/[0.04] text-zinc-400 hover:border-white/[0.18] hover:text-zinc-200"}`}
                   onClick={() => update("gender", gender)}
                 >
                   <UserRound aria-hidden="true" className="h-4 w-4" strokeWidth={1.9} />{gender}

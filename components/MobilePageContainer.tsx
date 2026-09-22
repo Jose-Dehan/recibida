@@ -10,7 +10,7 @@ export function MobilePageContainer({
   className?: string;
 }) {
   return (
-    <main className={`mx-auto min-h-screen w-full px-5 py-8 sm:px-6 sm:py-10 ${wide ? "max-w-4xl" : "max-w-[430px]"} ${className}`}>
+    <main className={`safe-page mx-auto min-h-screen min-h-[100dvh] w-full overflow-x-hidden px-4 min-[375px]:px-5 sm:px-6 ${wide ? "max-w-4xl" : "max-w-[430px]"} ${className}`}>
       {children}
     </main>
   );

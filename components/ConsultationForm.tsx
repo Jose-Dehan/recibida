@@ -56,21 +56,21 @@ export function ConsultationForm() {
   }
   return (
     <div>
-      <form className="space-y-5" onSubmit={submit}>
+      <form className="space-y-4 sm:space-y-5" onSubmit={submit}>
         <label className="block"><span className="mb-2 block text-sm font-semibold text-zinc-200">DNI</span><input className="field" inputMode="numeric" name="dni" pattern="[0-9]{8}" maxLength={8} required placeholder="Ingresá tu DNI" onInput={(event) => { event.currentTarget.value = event.currentTarget.value.replace(/\D/g, "").slice(0, 8); }} /></label>
         <label className="block"><span className="mb-2 block text-sm font-semibold text-zinc-200">Código de reserva</span><input className="field uppercase" name="code" required placeholder="Ingresá tu código" /></label>
         <PrimaryButton type="submit" disabled={loading}><span className="flex w-full items-center justify-between"><span className="flex items-center gap-2.5"><Search aria-hidden="true" className="h-[18px] w-[18px]" />{loading ? "Consultando…" : "Consultar"}</span><ArrowRight aria-hidden="true" className="h-5 w-5" /></span></PrimaryButton>
       </form>
-      {error && <p className="mt-5 rounded-[20px] border border-red-400/25 bg-red-400/[0.075] p-4 text-sm leading-6 text-red-200 shadow-[0_16px_42px_rgba(0,0,0,0.25)] backdrop-blur-xl" role="alert">{error}</p>}
+      {error && <p className="mt-4 rounded-[18px] border border-red-400/25 bg-red-400/[0.075] p-4 text-sm leading-6 text-red-200 shadow-[0_16px_42px_rgba(0,0,0,0.25)] backdrop-blur-xl sm:mt-5 sm:rounded-[20px]" role="alert">{error}</p>}
       {lookupFailure && (
-        <section className="relative mt-5 overflow-hidden rounded-[24px] border border-red-400/25 bg-[linear-gradient(135deg,rgba(248,113,113,0.1),rgba(255,255,255,0.025))] p-5 text-red-200 shadow-[0_18px_50px_rgba(0,0,0,0.3)] backdrop-blur-xl" role="status">
+        <section className="relative mt-4 overflow-hidden rounded-[20px] border border-red-400/25 bg-[linear-gradient(135deg,rgba(248,113,113,0.1),rgba(255,255,255,0.025))] p-4 text-red-200 shadow-[0_18px_50px_rgba(0,0,0,0.3)] backdrop-blur-xl sm:mt-5 sm:rounded-[24px] sm:p-5" role="status">
           <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-red-300/55 to-transparent" />
           <AlertCircle aria-hidden="true" className="mb-4 h-6 w-6" strokeWidth={1.7} />
           <p className="text-xl font-extrabold tracking-tight">{lookupFailureContent[lookupFailure].title}</p>
           <p className="mt-2 text-sm leading-6 text-red-100/65">{lookupFailureContent[lookupFailure].description}</p>
         </section>
       )}
-      {result && <div className="mt-7"><ReservationStatusCard status={result.status} reservation={result.reservation} /></div>}
+      {result && <div className="mt-6 sm:mt-7"><ReservationStatusCard status={result.status} reservation={result.reservation} /></div>}
     </div>
   );
 }

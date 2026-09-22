@@ -4,7 +4,7 @@ import { eventBenefit, eventDate, eventName } from "@/lib/event-data";
 
 export function EventInfoCard({ price, showName = false }: { price?: number | null; showName?: boolean }) {
   return (
-    <section className="glass-card px-5 py-[18px]">
+    <section className="glass-card px-4 py-4 sm:px-5 sm:py-[18px]">
       {showName && <p className="mb-3 text-base font-extrabold tracking-tight text-white">{eventName}</p>}
       <div className="flex items-center gap-2.5 text-sm font-semibold text-zinc-200">
         <CalendarDays aria-hidden="true" className="h-4 w-4 shrink-0 text-accent" strokeWidth={1.9} />
