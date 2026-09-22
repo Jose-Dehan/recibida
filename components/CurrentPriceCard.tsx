@@ -38,16 +38,17 @@ export function CurrentPriceCard({ price, tierLabel = null, remainingInTier = nu
           </div>
 
           {!loading && !error && price !== null && lowStock && (
-            <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.08] pt-4">
-              {nextTierPrice !== null && (
-                <p className="flex shrink-0 items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-zinc-500">
-                  <span>Soon</span>
-                  <ArrowRight aria-hidden="true" className="h-3 w-3 text-accent/70" strokeWidth={2} />
-                  <span className="font-extrabold tracking-[-0.01em] text-zinc-300">{formatPrice(nextTierPrice)}</span>
-                </p>
-              )}
-              <p className="ml-auto max-w-full rounded-full border border-red-500/40 bg-red-500/10 px-3 py-2 text-center text-[10px] font-extrabold uppercase tracking-[0.1em] text-red-400 shadow-[0_0_20px_rgba(239,68,68,0.1)]">
-                Quedan pocas entradas
+            <p className="mt-4 inline-flex max-w-full rounded-full border border-red-500/40 bg-red-500/10 px-3 py-2 text-center text-[10px] font-extrabold uppercase tracking-[0.1em] text-red-400 shadow-[0_0_20px_rgba(239,68,68,0.1)]">
+              Quedan pocas entradas
+            </p>
+          )}
+
+          {!loading && !error && price !== null && lowStock && nextTierPrice !== null && (
+            <div className="mt-5 border-t border-white/[0.08] pt-4">
+              <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-zinc-500">
+                <span>Soon</span>
+                <ArrowRight aria-hidden="true" className="h-3 w-3 text-accent/70" strokeWidth={2} />
+                <span className="font-extrabold tracking-[-0.01em] text-zinc-300">{formatPrice(nextTierPrice)}</span>
               </p>
             </div>
           )}
