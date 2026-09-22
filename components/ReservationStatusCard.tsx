@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { CircleCheck, CircleX, Clock3, FileWarning, TriangleAlert } from "lucide-react";
 import type { BackendReservation, ReservationStatus } from "@/types";
-import { EventLocationCard } from "./EventLocationCard";
 import { PaymentDetailsCard } from "./PaymentDetailsCard";
 import { ReservationSummaryCard } from "./ReservationSummaryCard";
 import { ReceiptUploader } from "./ReceiptUploader";
@@ -46,14 +45,11 @@ function PendingReservation({ reservation }: { reservation: BackendReservation }
 }
 
 function ApprovedReservation() {
-  return <>
+  return (
     <StatusPanel icon={CircleCheck} title="Entrada aprobada" style="border-emerald-400/30 bg-emerald-400/10 text-emerald-300" glow="via-emerald-300/60">
       <p className="mt-2 text-sm leading-6 text-current opacity-65">Tu pago fue validado correctamente. Tu entrada está confirmada.</p>
     </StatusPanel>
-    <div className="mt-4 space-y-4">
-      <EventLocationCard confirmed />
-    </div>
-  </>;
+  );
 }
 
 function ExpiredReservation() {

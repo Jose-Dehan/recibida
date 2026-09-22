@@ -3,7 +3,6 @@
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { MobilePageContainer } from "@/components/MobilePageContainer";
-import { EventLocationCard } from "@/components/EventLocationCard";
 import { PaymentDetailsCard } from "@/components/PaymentDetailsCard";
 import { ReceiptUploader } from "@/components/ReceiptUploader";
 import { ReservationSummaryCard } from "@/components/ReservationSummaryCard";
@@ -46,7 +45,6 @@ export default function ReservationPage({ params }: { params: Promise<{ codigo: 
     <p className={`mt-4 rounded-[20px] border p-4 text-sm ${data.emailSent !== false ? "border-emerald-400/20 bg-emerald-400/[0.07] text-emerald-200" : "border-amber-400/20 bg-amber-400/[0.07] text-amber-200"}`}>{data.emailSent !== false ? "Te enviamos el código de reserva a tu email. Si no lo encontrás, revisá la carpeta de spam." : "No pudimos enviar el email. Guardá este código de reserva."}</p>
     <aside className="mt-4 rounded-[20px] border border-line/80 bg-[#111113] p-5 text-sm leading-6 text-zinc-400"><p className="font-semibold text-zinc-200">Guardá tu código de reserva</p><p className="mt-1">Para verificar el estado vas a necesitar tu DNI y el código. Podés hacerlo desde <Link href="/consulta" className="font-semibold text-accent underline decoration-accent/40 underline-offset-4">Consultar mi entrada</Link>.</p></aside>
     {canUploadReceipt && <div className="mt-5"><ReceiptUploader dni={backendReservation.dni} codigo={backendReservation.code} existingReceipt={backendReservation.receiptUploaded === true} /></div>}
-    <div className="mt-6"><EventLocationCard /></div>
     <div className="mt-6 rounded-[20px] border border-line bg-[#111114] p-5 text-sm leading-6 text-zinc-400"><p className="font-semibold text-zinc-200">Esperamos tu comprobante hasta el vencimiento indicado.</p><p className="mt-1">La entrada se confirma cuando validamos el pago.</p></div>
   </MobilePageContainer>;
 }

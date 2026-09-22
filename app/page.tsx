@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Search, Ticket } from "lucide-react";
+import { ArrowRight, Landmark, Search, Ticket } from "lucide-react";
 import { CurrentPriceCard } from "@/components/CurrentPriceCard";
 import { EventHeader } from "@/components/EventHeader";
 import { ExperienceShell } from "@/components/ExperienceShell";
@@ -23,6 +23,15 @@ export default function HomePage() {
               <span className="flex items-center gap-3"><Ticket aria-hidden="true" className="h-5 w-5" strokeWidth={2.2} />Comprar entrada</span>
               <ArrowRight aria-hidden="true" className="h-5 w-5 transition-transform duration-200 group-hover:translate-x-1" strokeWidth={2.2} />
             </Link>
+          )}
+          {!loading && !error && price !== null && (
+            <aside className="flex items-start gap-3 rounded-[18px] border border-accent/[0.16] bg-accent/[0.045] px-4 py-3.5 text-left">
+              <Landmark aria-hidden="true" className="mt-0.5 h-[18px] w-[18px] shrink-0 text-accent" strokeWidth={1.9} />
+              <div className="text-[12px] leading-5 text-zinc-400">
+                <p className="font-extrabold text-zinc-200">Pago únicamente por transferencia</p>
+                <p>Para validar el pago, tenés que subir el comprobante desde la aplicación.</p>
+              </div>
+            </aside>
           )}
           {!loading && !error && price === null && (
             <button type="button" disabled className="flex min-h-[64px] w-full cursor-not-allowed items-center justify-center rounded-[20px] border border-white/[0.08] bg-white/[0.035] px-5 text-[16px] font-extrabold text-zinc-500" aria-label="Entradas agotadas">
