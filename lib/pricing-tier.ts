@@ -1,11 +1,21 @@
-const tierNamesByPrice = new Map<number, string>([
-  [35000, "PREVENTA"],
-  [40000, "TANDA 1"],
-  [45000, "TANDA 2"],
-  [50000, "TANDA 3"],
-  [55000, "LAST CHANCE"],
-]);
+const pricingTiers = [
+  { price: 35000, name: "PREVENTA" },
+  { price: 40000, name: "TANDA 1" },
+  { price: 45000, name: "TANDA 2" },
+  { price: 50000, name: "TANDA 3" },
+  { price: 55000, name: "LAST CHANCE" },
+] as const;
+
+export const LOW_STOCK_THRESHOLD = 10;
 
 export function getTierName(price: number | null) {
-  return price === null ? null : tierNamesByPrice.get(price) ?? null;
+  return pricingTiers.find((tier) => tier.price === price)?.name ?? null;
+}
+
+export function getNextTierPrice(price: number | null) {
+  const currentTierIndex = pricingTiers.findIndex((tier) => tier.price === price);
+
+  if (currentTierIndex < 0 || currentTierIndex === pricingTiers.length - 1) return null;
+
+  return pricingTiers[currentTierIndex + 1].price;
 }

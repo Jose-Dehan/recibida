@@ -8,13 +8,13 @@ import { ExperienceShell } from "@/components/ExperienceShell";
 import { usePrice } from "@/lib/use-price";
 
 export default function HomePage() {
-  const { price, loading, error } = usePrice();
+  const { price, remainingInCurrentTier, loading, error } = usePrice();
 
   return (
     <ExperienceShell centered>
         <EventHeader />
 
-        <div className="mt-8"><CurrentPriceCard price={price} featured loading={loading} error={error} /></div>
+        <div className="mt-8"><CurrentPriceCard price={price} remainingInCurrentTier={remainingInCurrentTier} featured loading={loading} error={error} /></div>
         {error && <p className="mt-3 text-sm text-red-300" role="alert">{error}</p>}
 
         <div className="mt-5 space-y-3">

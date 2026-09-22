@@ -32,7 +32,7 @@ export function ConsultationForm() {
     const form = new FormData(event.currentTarget);
     const dni = String(form.get("dni") ?? "").replace(/\D/g, "");
     const codigo = String(form.get("code") ?? "").trim().toUpperCase();
-    if (!/^\d{7,8}$/.test(dni) || /^0+$/.test(dni) || !codigo) { setError("Ingresá un DNI y un código de reserva válidos."); setLoading(false); return; }
+    if (!/^\d{8}$/.test(dni) || /^0+$/.test(dni) || !codigo) { setError("Ingresá un DNI de 8 números y un código de reserva válido."); setLoading(false); return; }
     try {
       const response = await fetch(`/api/reservations?dni=${encodeURIComponent(dni)}&codigo=${encodeURIComponent(codigo)}`, { cache: "no-store" });
       const data = (await response.json()) as ReservationLookupResponse;
@@ -57,7 +57,7 @@ export function ConsultationForm() {
   return (
     <div>
       <form className="space-y-5" onSubmit={submit}>
-        <label className="block"><span className="mb-2 block text-sm font-semibold text-zinc-200">DNI</span><input className="field" inputMode="numeric" name="dni" required placeholder="Ingresá tu DNI" /></label>
+        <label className="block"><span className="mb-2 block text-sm font-semibold text-zinc-200">DNI</span><input className="field" inputMode="numeric" name="dni" pattern="[0-9]{8}" maxLength={8} required placeholder="Ingresá tu DNI" onInput={(event) => { event.currentTarget.value = event.currentTarget.value.replace(/\D/g, "").slice(0, 8); }} /></label>
         <label className="block"><span className="mb-2 block text-sm font-semibold text-zinc-200">Código de reserva</span><input className="field uppercase" name="code" required placeholder="Ingresá tu código" /></label>
         <PrimaryButton type="submit" disabled={loading}><span className="flex w-full items-center justify-between"><span className="flex items-center gap-2.5"><Search aria-hidden="true" className="h-[18px] w-[18px]" />{loading ? "Consultando…" : "Consultar"}</span><ArrowRight aria-hidden="true" className="h-5 w-5" /></span></PrimaryButton>
       </form>

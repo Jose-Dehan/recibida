@@ -1,8 +1,10 @@
 import { formatPrice } from "@/lib/format";
-import { getTierName } from "@/lib/pricing-tier";
+import { getNextTierPrice, getTierName, LOW_STOCK_THRESHOLD } from "@/lib/pricing-tier";
 
-export function CurrentPriceCard({ price, compact = false, featured = false, loading = false, error = null }: { price: number | null; compact?: boolean; featured?: boolean; loading?: boolean; error?: string | null }) {
+export function CurrentPriceCard({ price, remainingInCurrentTier = null, compact = false, featured = false, loading = false, error = null }: { price: number | null; remainingInCurrentTier?: number | null; compact?: boolean; featured?: boolean; loading?: boolean; error?: string | null }) {
   const tierName = getTierName(price);
+  const nextTierPrice = getNextTierPrice(price);
+  const isLowStock = remainingInCurrentTier !== null && remainingInCurrentTier > 0 && remainingInCurrentTier <= LOW_STOCK_THRESHOLD;
 
   if (featured) {
     if (!loading && !error && price === null) {
@@ -21,17 +23,35 @@ export function CurrentPriceCard({ price, compact = false, featured = false, loa
       <section className="group relative overflow-hidden rounded-[28px] border border-accent/25 bg-[linear-gradient(135deg,rgba(214,243,106,0.12),rgba(18,20,17,0.88)_42%,rgba(12,13,12,0.96))] px-6 py-6 shadow-[0_24px_70px_rgba(0,0,0,0.48),0_0_45px_rgba(214,243,106,0.08)] backdrop-blur-xl transition duration-300 hover:border-accent/40 hover:shadow-[0_24px_75px_rgba(0,0,0,0.48),0_0_55px_rgba(214,243,106,0.13)] sm:px-7 sm:py-7">
         <div className="absolute -right-12 -top-16 h-40 w-40 rounded-full bg-accent/[0.14] blur-3xl transition-transform duration-500 group-hover:scale-110" />
         <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-accent/70 to-transparent" />
-        <div className="relative flex items-start justify-between gap-3">
-          <div>
+        <div className="relative">
+          <div className="flex items-start justify-between gap-3">
+            <div className="min-w-0">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-400">Entrada actual</p>
             <p className="mt-3 text-[clamp(2.8rem,14vw,4rem)] font-black leading-none tracking-[-0.065em] text-white [text-shadow:0_0_30px_rgba(255,255,255,0.08)]">
               {loading ? "Cargando…" : error ? "No disponible" : formatPrice(price as number)}
             </p>
+            </div>
+            {!loading && tierName && (
+              <span className="mt-0.5 shrink-0 rounded-full border border-accent/30 bg-accent/[0.1] px-2.5 py-1.5 text-[9px] font-extrabold uppercase tracking-[0.13em] text-accent shadow-[0_0_20px_rgba(214,243,106,0.1)]">
+                {tierName}
+              </span>
+            )}
           </div>
-          {!loading && tierName && (
-            <span className="mt-0.5 shrink-0 rounded-full border border-accent/30 bg-accent/[0.1] px-2.5 py-1.5 text-[9px] font-extrabold uppercase tracking-[0.13em] text-accent shadow-[0_0_20px_rgba(214,243,106,0.1)]">
-              {tierName}
-            </span>
+
+          {!loading && !error && price !== null && (nextTierPrice !== null || isLowStock) && (
+            <div className="mt-5 flex flex-wrap items-end justify-between gap-3 border-t border-white/[0.08] pt-4">
+              {nextTierPrice !== null && (
+                <div className="shrink-0">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500">Sube pronto</p>
+                  <p className="mt-1 text-xl font-black tracking-[-0.035em] text-zinc-100">{formatPrice(nextTierPrice)}</p>
+                </div>
+              )}
+              {isLowStock && (
+                <p className="rounded-full border border-amber-300/25 bg-amber-300/[0.08] px-3 py-2 text-[11px] font-extrabold tracking-[0.01em] text-amber-200 shadow-[0_0_22px_rgba(251,191,36,0.1)]">
+                  Quedan pocas entradas
+                </p>
+              )}
+            </div>
           )}
         </div>
       </section>

@@ -1,4 +1,4 @@
-import { CalendarDays, ExternalLink, MapPin } from "lucide-react";
+import { CalendarDays, ExternalLink, GlassWater, MapPin } from "lucide-react";
 import { EventAddressLink } from "./EventLocationLinks";
 import { eventBenefit, eventDate, eventName, venueArea, venueName } from "@/lib/event-data";
 
@@ -9,8 +9,9 @@ export function EventHeader() {
     <header className="relative">
       <div className="flex items-center justify-between gap-4">
         <p className="text-[11px] font-bold uppercase tracking-[0.26em] text-accent/80">Entradas 2026</p>
-        <span className="rounded-full border border-accent/30 bg-accent/[0.09] px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.16em] text-accent shadow-[0_0_22px_rgba(214,243,106,0.14)]">
-          {eventBenefit}
+        <span className="flex max-w-full shrink-0 items-center gap-2 rounded-full border border-accent/55 bg-[linear-gradient(135deg,rgba(214,243,106,0.16),rgba(214,243,106,0.06))] px-4 py-2.5 text-[12px] font-black uppercase tracking-[0.18em] text-accent shadow-[0_0_34px_rgba(214,243,106,0.27),inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-xl sm:px-5 sm:py-3 sm:text-[13px]">
+          <GlassWater aria-hidden="true" className="h-4 w-4 shrink-0" strokeWidth={2.1} />
+          <span className="whitespace-nowrap">{eventBenefit}</span>
         </span>
       </div>
 

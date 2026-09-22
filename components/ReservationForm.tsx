@@ -41,7 +41,7 @@ export function ReservationForm({ price, onPriceChange }: { price: number; onPri
     const nextErrors: FormErrors = {};
 
     if (!values.name.trim()) nextErrors.name = "Ingresá tu nombre y apellido.";
-    if (!/^\d{7,8}$/.test(dni)) nextErrors.dni = "Ingresá un DNI de 7 u 8 números.";
+    if (!/^\d{8}$/.test(dni)) nextErrors.dni = "Ingresá un DNI de 8 números.";
     else if (/^0+$/.test(dni)) nextErrors.dni = "Ingresá un DNI válido.";
     if (!isValidEmail(email)) nextErrors.email = "Ingresá un email con formato válido.";
     if (!confirmEmail) nextErrors.confirmEmail = "Volvé a ingresar tu email.";
@@ -87,7 +87,7 @@ export function ReservationForm({ price, onPriceChange }: { price: number; onPri
         </label>
         <label className="block">
           <span className="mb-2 block text-sm font-semibold text-zinc-200">DNI</span>
-          <input className="field" name="dni" inputMode="numeric" autoComplete="off" required value={values.dni} onChange={(e) => update("dni", e.target.value.replace(/[^\d.]/g, ""))} placeholder="Ingresá tu DNI" aria-invalid={Boolean(errors.dni)} aria-describedby={errors.dni ? "dni-error" : undefined} />
+          <input className="field" name="dni" inputMode="numeric" autoComplete="off" pattern="[0-9]{8}" maxLength={8} required value={values.dni} onChange={(e) => update("dni", e.target.value.replace(/\D/g, "").slice(0, 8))} placeholder="Ingresá tu DNI" aria-invalid={Boolean(errors.dni)} aria-describedby={errors.dni ? "dni-error" : undefined} />
           {errors.dni && <p id="dni-error" className="mt-2 text-sm text-red-300" role="alert">{errors.dni}</p>}
         </label>
         <label className="block">
