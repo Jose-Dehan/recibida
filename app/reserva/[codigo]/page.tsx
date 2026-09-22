@@ -80,7 +80,7 @@ export default function ReservationPage({ params }: { params: Promise<{ codigo: 
   return <MobilePageContainer>
     <HomeBackButton />
     <div className="flex items-start justify-between gap-4"><div><p className="eyebrow">Listo, recibimos tus datos</p><h1 className="mt-2 text-[2rem] font-extrabold tracking-[-0.035em]">Compra registrada</h1></div><div className="mt-1 shrink-0"><StatusBadge status={status} /></div></div>
-    <div className="mt-6 space-y-3"><ReservationSummaryCard reservation={reservation} showCode={false} /><PaymentDetailsCard /></div>
+    <div className="mt-6 space-y-3"><ReservationSummaryCard reservation={reservation} /><PaymentDetailsCard /></div>
     <aside className="relative mt-4 overflow-hidden rounded-[22px] border border-accent/[0.16] bg-[linear-gradient(135deg,rgba(214,243,106,0.055),rgba(17,17,19,0.96)_48%)] p-5 shadow-[0_16px_45px_rgba(0,0,0,0.25),0_0_28px_rgba(214,243,106,0.035)]">
       <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-accent/45 to-transparent" />
       <div className="relative">

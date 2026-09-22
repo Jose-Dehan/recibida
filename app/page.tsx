@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Search, Ticket } from "lucide-react";
+import { ArrowRight, Info, Search, Ticket } from "lucide-react";
 import { CurrentPriceCard } from "@/components/CurrentPriceCard";
 import { EventHeader } from "@/components/EventHeader";
 import { ExperienceShell } from "@/components/ExperienceShell";
@@ -34,6 +34,14 @@ export default function HomePage() {
             <ArrowRight aria-hidden="true" className="h-5 w-5 text-zinc-500 transition-all duration-200 group-hover:translate-x-1 group-hover:text-accent" strokeWidth={2} />
           </Link>
         </div>
+
+        <aside className="mt-4 flex items-start gap-3 rounded-[18px] border border-white/[0.08] bg-white/[0.025] px-4 py-3.5 text-[12px] leading-5 text-zinc-400">
+          <Info aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-accent/70" strokeWidth={1.8} />
+          <p>
+            ¿Ya realizaste el pago y no subiste el comprobante?<br />
+            Podés hacerlo desde <Link href="/consulta" className="font-bold text-accent transition hover:text-[#e1fa80]">Consultar mi entrada</Link>.
+          </p>
+        </aside>
     </ExperienceShell>
   );
 }
