@@ -8,7 +8,7 @@ export function CurrentPriceCard({ price, tierLabel = null, remainingInTier = nu
   if (featured) {
     if (!loading && !error && (soldOut || price === null)) {
       return (
-        <section className="relative overflow-hidden rounded-[28px] border border-red-300/[0.16] bg-[linear-gradient(135deg,rgba(127,29,29,0.12),rgba(18,18,19,0.94)_48%,rgba(10,11,11,0.98))] px-6 py-7 shadow-[0_24px_70px_rgba(0,0,0,0.48)] backdrop-blur-xl sm:px-7">
+        <section className="relative overflow-hidden rounded-[24px] border border-red-300/[0.16] bg-[linear-gradient(135deg,rgba(127,29,29,0.12),rgba(18,18,19,0.94)_48%,rgba(10,11,11,0.98))] px-5 py-6 shadow-[0_24px_70px_rgba(0,0,0,0.48)] backdrop-blur-xl sm:rounded-[28px] sm:px-7 sm:py-7">
           <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-red-200/30 to-transparent" />
           <div className="relative">
             <h2 className="text-[clamp(2rem,10vw,3rem)] font-black leading-none tracking-[-0.05em] text-white">Entradas agotadas</h2>
@@ -19,14 +19,14 @@ export function CurrentPriceCard({ price, tierLabel = null, remainingInTier = nu
     }
 
     return (
-      <section className="group relative overflow-hidden rounded-[28px] border border-accent/25 bg-[linear-gradient(135deg,rgba(214,243,106,0.12),rgba(18,20,17,0.88)_42%,rgba(12,13,12,0.96))] px-6 py-6 shadow-[0_24px_70px_rgba(0,0,0,0.48),0_0_45px_rgba(214,243,106,0.08)] backdrop-blur-xl transition duration-300 hover:border-accent/40 hover:shadow-[0_24px_75px_rgba(0,0,0,0.48),0_0_55px_rgba(214,243,106,0.13)] sm:px-7 sm:py-7">
+      <section className="group relative overflow-hidden rounded-[24px] border border-accent/25 bg-[linear-gradient(135deg,rgba(214,243,106,0.12),rgba(18,20,17,0.88)_42%,rgba(12,13,12,0.96))] px-5 py-5 shadow-[0_24px_70px_rgba(0,0,0,0.48),0_0_45px_rgba(214,243,106,0.08)] backdrop-blur-xl transition duration-300 hover:border-accent/40 hover:shadow-[0_24px_75px_rgba(0,0,0,0.48),0_0_55px_rgba(214,243,106,0.13)] sm:rounded-[28px] sm:px-7 sm:py-7">
         <div className="absolute -right-12 -top-16 h-40 w-40 rounded-full bg-accent/[0.14] blur-3xl transition-transform duration-500 group-hover:scale-110" />
         <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-accent/70 to-transparent" />
         <div className="relative">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-zinc-400">Entrada actual</p>
-              <p className="mt-3 text-[clamp(2.8rem,14vw,4rem)] font-black leading-none tracking-[-0.065em] text-white [text-shadow:0_0_30px_rgba(255,255,255,0.08)]">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.17em] text-zinc-400 sm:text-xs sm:tracking-[0.18em]">Entrada actual</p>
+              <p className="mt-2.5 text-[clamp(2.55rem,13.5vw,4rem)] font-black leading-none tracking-[-0.06em] text-white [text-shadow:0_0_30px_rgba(255,255,255,0.08)] sm:mt-3 sm:tracking-[-0.065em]">
                 {loading ? "Cargando…" : error ? "No disponible" : formatPrice(price as number)}
               </p>
             </div>
@@ -38,13 +38,13 @@ export function CurrentPriceCard({ price, tierLabel = null, remainingInTier = nu
           </div>
 
           {!loading && !error && price !== null && lowStock && (
-            <p className="mt-4 inline-flex max-w-full rounded-full border border-red-500/40 bg-red-500/10 px-3 py-2 text-center text-[10px] font-extrabold uppercase tracking-[0.1em] text-red-400 shadow-[0_0_20px_rgba(239,68,68,0.1)]">
+            <p className="mt-3.5 inline-flex max-w-full rounded-full border border-red-500/40 bg-red-500/10 px-3 py-1.5 text-center text-[9px] font-extrabold uppercase tracking-[0.09em] text-red-400 shadow-[0_0_20px_rgba(239,68,68,0.1)] sm:mt-4 sm:py-2 sm:text-[10px] sm:tracking-[0.1em]">
               Quedan pocas entradas
             </p>
           )}
 
           {!loading && !error && price !== null && lowStock && nextTierPrice !== null && (
-            <div className="mt-5 border-t border-white/[0.08] pt-4">
+            <div className="mt-4 border-t border-white/[0.08] pt-3.5 sm:mt-5 sm:pt-4">
               <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-zinc-500">
                 <span>Soon</span>
                 <ArrowRight aria-hidden="true" className="h-3 w-3 text-accent/70" strokeWidth={2} />

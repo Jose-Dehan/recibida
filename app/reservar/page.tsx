@@ -31,9 +31,9 @@ export default function ReservePage() {
         <div className="flex items-start gap-3">
           <Clock3 aria-hidden="true" className="mt-0.5 h-[18px] w-[18px] shrink-0 text-accent" strokeWidth={1.8} />
           <div className="space-y-1.5 text-[13px] leading-5 text-zinc-400">
-            <p className="font-bold text-zinc-200">Tu entrada queda reservada durante 5 días.</p>
-            <p>El pago se realiza únicamente por transferencia. Tenés 5 días para hacerla y subir el comprobante desde la aplicación para su validación.</p>
-            <p>Si no recibimos el comprobante dentro de ese plazo, la compra se cancela automáticamente.</p>
+            <p className="font-bold text-zinc-200">Tenés 2 días para realizar la transferencia.</p>
+            <p>El pago se realiza únicamente por transferencia. Después de pagar, subí el comprobante desde la aplicación para su validación.</p>
+            <p>Si no recibimos el comprobante dentro de ese plazo, la reserva vence automáticamente.</p>
           </div>
         </div>
       </aside>
