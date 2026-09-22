@@ -39,8 +39,8 @@ export function CurrentPriceCard({ price, remainingInCurrentTier = null, compact
             )}
           </div>
 
-          {!loading && !error && price !== null && (nextTierPrice !== null || isLowStock) && (
-            <div className="mt-5 flex flex-wrap items-end justify-between gap-3 border-t border-white/[0.08] pt-4">
+          {!loading && !error && price !== null && isLowStock && (
+            <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.08] pt-4">
               {nextTierPrice !== null && (
                 <p className="flex shrink-0 items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-zinc-500">
                   <span>Soon</span>
@@ -48,11 +48,9 @@ export function CurrentPriceCard({ price, remainingInCurrentTier = null, compact
                   <span className="font-extrabold tracking-[-0.01em] text-zinc-300">{formatPrice(nextTierPrice)}</span>
                 </p>
               )}
-              {isLowStock && (
-                <p className="rounded-full border border-amber-300/25 bg-amber-300/[0.08] px-3 py-2 text-[11px] font-extrabold tracking-[0.01em] text-amber-200 shadow-[0_0_22px_rgba(251,191,36,0.1)]">
+              <p className="ml-auto max-w-full rounded-full border border-red-500/40 bg-red-500/10 px-3 py-2 text-center text-[10px] font-extrabold uppercase tracking-[0.1em] text-red-300 shadow-[0_0_20px_rgba(239,68,68,0.1)]">
                   Quedan pocas entradas
-                </p>
-              )}
+              </p>
             </div>
           )}
         </div>

@@ -6,7 +6,7 @@ const pricingTiers = [
   { price: 55000, name: "LAST CHANCE" },
 ] as const;
 
-export const LOW_STOCK_THRESHOLD = 10;
+export const LOW_STOCK_THRESHOLD = 30;
 
 export function getTierName(price: number | null) {
   return pricingTiers.find((tier) => tier.price === price)?.name ?? null;
