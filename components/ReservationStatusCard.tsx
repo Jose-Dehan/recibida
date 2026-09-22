@@ -5,7 +5,6 @@ import Link from "next/link";
 import { CircleCheck, CircleX, Clock3, FileWarning, TriangleAlert } from "lucide-react";
 import type { BackendReservation, ReservationStatus } from "@/types";
 import { PaymentDetailsCard } from "./PaymentDetailsCard";
-import { ReservationSummaryCard } from "./ReservationSummaryCard";
 import { ReceiptUploader } from "./ReceiptUploader";
 
 const contactEmail = "recibidaia@gmail.com";
@@ -20,26 +19,23 @@ function StatusPanel({ icon: Icon, title, children, style, glow }: { icon: typeo
 }
 
 function PendingReservation({ reservation }: { reservation: BackendReservation }) {
-  const complete = reservation.name && reservation.dni && reservation.code && Number.isFinite(Number(reservation.price));
   const [receiptUploaded, setReceiptUploaded] = useState(reservation.receiptUploaded === true);
-  const canUploadReceipt = reservation.status === "Pendiente";
 
-  return <>
-    {receiptUploaded ? (
+  if (receiptUploaded) {
+    return (
       <StatusPanel icon={CircleCheck} title="Comprobante recibido" style="border-amber-400/30 bg-amber-400/10 text-amber-200" glow="via-amber-300/60">
         <p className="mt-2 text-sm leading-6 text-current opacity-70">Recibimos tu comprobante. Tu entrada sigue pendiente de validación.</p>
       </StatusPanel>
-    ) : (
+    );
+  }
+
+  return <>
       <StatusPanel icon={FileWarning} title="Falta subir el comprobante" style="border-amber-400/30 bg-amber-400/10 text-amber-200" glow="via-amber-300/60">
         <p className="mt-2 text-sm leading-6 text-current opacity-70">Si ya realizaste el pago, subí el comprobante para que podamos validarlo.</p>
       </StatusPanel>
-    )}
     <div className="mt-4 space-y-4">
-      {complete && <>
-        <ReservationSummaryCard reservation={{ name: reservation.name, code: reservation.code, price: Number(reservation.price), expiresAt: reservation.expiresAt }} showCode={false} />
-        <PaymentDetailsCard />
-      </>}
-      {canUploadReceipt && <ReceiptUploader dni={reservation.dni} codigo={reservation.code} existingReceipt={receiptUploaded} collapsed onUploaded={() => setReceiptUploaded(true)} />}
+      <PaymentDetailsCard />
+      <ReceiptUploader dni={reservation.dni} codigo={reservation.code} collapsed onUploaded={() => setReceiptUploaded(true)} />
     </div>
   </>;
 }
