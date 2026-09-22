@@ -31,7 +31,7 @@ function PendingReservation({ reservation }: { reservation: BackendReservation }
       </StatusPanel>
     ) : (
       <StatusPanel icon={FileWarning} title="Falta subir el comprobante" style="border-amber-400/30 bg-amber-400/10 text-amber-200" glow="via-amber-300/60">
-        <p className="mt-2 text-sm leading-6 text-current opacity-70">Tu reserva está registrada, pero todavía falta que subas el comprobante de transferencia.</p>
+        <p className="mt-2 text-sm leading-6 text-current opacity-70">Si ya realizaste el pago, subí el comprobante para que podamos validarlo.</p>
       </StatusPanel>
     )}
     <div className="mt-4 space-y-4">
