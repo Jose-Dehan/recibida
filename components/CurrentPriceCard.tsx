@@ -1,14 +1,12 @@
 import { ArrowRight } from "lucide-react";
 import { formatPrice } from "@/lib/format";
-import { getNextTierPrice, getTierName, LOW_STOCK_THRESHOLD } from "@/lib/pricing-tier";
+import { LOW_STOCK_THRESHOLD } from "@/lib/pricing-tier";
 
-export function CurrentPriceCard({ price, remainingInCurrentTier = null, compact = false, featured = false, loading = false, error = null }: { price: number | null; remainingInCurrentTier?: number | null; compact?: boolean; featured?: boolean; loading?: boolean; error?: string | null }) {
-  const tierName = getTierName(price);
-  const nextTierPrice = getNextTierPrice(price);
-  const isLowStock = remainingInCurrentTier !== null && remainingInCurrentTier > 0 && remainingInCurrentTier <= LOW_STOCK_THRESHOLD;
+export function CurrentPriceCard({ price, tierLabel = null, remainingInTier = null, nextTierPrice = null, soldOut = false, compact = false, featured = false, loading = false, error = null }: { price: number | null; tierLabel?: string | null; remainingInTier?: number | null; nextTierPrice?: number | null; soldOut?: boolean; compact?: boolean; featured?: boolean; loading?: boolean; error?: string | null }) {
+  const lowStock = !soldOut && remainingInTier !== null && remainingInTier > 0 && remainingInTier <= LOW_STOCK_THRESHOLD;
 
   if (featured) {
-    if (!loading && !error && price === null) {
+    if (!loading && !error && (soldOut || price === null)) {
       return (
         <section className="relative overflow-hidden rounded-[28px] border border-red-300/[0.16] bg-[linear-gradient(135deg,rgba(127,29,29,0.12),rgba(18,18,19,0.94)_48%,rgba(10,11,11,0.98))] px-6 py-7 shadow-[0_24px_70px_rgba(0,0,0,0.48)] backdrop-blur-xl sm:px-7">
           <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-red-200/30 to-transparent" />
@@ -32,14 +30,14 @@ export function CurrentPriceCard({ price, remainingInCurrentTier = null, compact
                 {loading ? "Cargando…" : error ? "No disponible" : formatPrice(price as number)}
               </p>
             </div>
-            {!loading && tierName && (
+            {!loading && tierLabel && (
               <span className="mt-0.5 shrink-0 rounded-full border border-accent/30 bg-accent/[0.1] px-2.5 py-1.5 text-[9px] font-extrabold uppercase tracking-[0.13em] text-accent shadow-[0_0_20px_rgba(214,243,106,0.1)]">
-                {tierName}
+                {tierLabel}
               </span>
             )}
           </div>
 
-          {!loading && !error && price !== null && isLowStock && (
+          {!loading && !error && price !== null && lowStock && (
             <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.08] pt-4">
               {nextTierPrice !== null && (
                 <p className="flex shrink-0 items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-zinc-500">
@@ -48,8 +46,8 @@ export function CurrentPriceCard({ price, remainingInCurrentTier = null, compact
                   <span className="font-extrabold tracking-[-0.01em] text-zinc-300">{formatPrice(nextTierPrice)}</span>
                 </p>
               )}
-              <p className="ml-auto max-w-full rounded-full border border-red-500/40 bg-red-500/10 px-3 py-2 text-center text-[10px] font-extrabold uppercase tracking-[0.1em] text-red-300 shadow-[0_0_20px_rgba(239,68,68,0.1)]">
-                  Quedan pocas entradas
+              <p className="ml-auto max-w-full rounded-full border border-red-500/40 bg-red-500/10 px-3 py-2 text-center text-[10px] font-extrabold uppercase tracking-[0.1em] text-red-400 shadow-[0_0_20px_rgba(239,68,68,0.1)]">
+                Quedan pocas entradas
               </p>
             </div>
           )}
@@ -63,7 +61,7 @@ export function CurrentPriceCard({ price, remainingInCurrentTier = null, compact
       <div className="absolute -right-10 -top-12 h-28 w-28 rounded-full bg-accent/[0.035] blur-2xl" />
       <div className="relative flex items-end justify-between gap-4">
         <div><p className="text-sm font-medium text-zinc-400">Entrada actual</p><p className={`${compact ? "mt-1 text-[2rem]" : "mt-1.5 text-[2.35rem]"} font-extrabold leading-none tracking-[-0.045em]`}>{loading ? "Cargando…" : error ? "No disponible" : price === null ? "Entradas agotadas" : formatPrice(price)}</p></div>
-        {!loading && tierName && <span className="mb-0.5 shrink-0 rounded-full border border-line bg-[#101012] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">{tierName}</span>}
+        {!loading && tierLabel && <span className="mb-0.5 shrink-0 rounded-full border border-line bg-[#101012] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">{tierLabel}</span>}
       </div>
     </section>
   );
