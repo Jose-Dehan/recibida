@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ArrowRight, UserRound } from "lucide-react";
-import type { ReservationFormValues } from "@/types";
+import type { Graduate, GraduatesResponse, ReservationFormValues } from "@/types";
 import { PrimaryButton } from "./Buttons";
 import { ConfirmationBottomSheet } from "./ConfirmationBottomSheet";
 
-const initialValues: ReservationFormValues = { name: "", dni: "", email: "", confirmEmail: "", gender: "" };
-type FormErrors = Partial<Record<"name" | "dni" | "email" | "confirmEmail" | "gender", string>>;
+const initialValues: ReservationFormValues = { name: "", dni: "", email: "", confirmEmail: "", gender: "", graduate: "" };
+type FormErrors = Partial<Record<"name" | "dni" | "email" | "confirmEmail" | "gender" | "graduate", string>>;
 
 function normalizeDni(value: string) {
   return value.replace(/\D/g, "");
@@ -25,10 +25,31 @@ export function ReservationForm({ price, onPriceChange }: { price: number; onPri
   const [values, setValues] = useState(initialValues);
   const [open, setOpen] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
+  const [graduates, setGraduates] = useState<Graduate[]>([]);
+  const [graduatesLoading, setGraduatesLoading] = useState(true);
+  const [graduatesError, setGraduatesError] = useState("");
+
+  const loadGraduates = useCallback(async () => {
+    setGraduatesLoading(true);
+    setGraduatesError("");
+    try {
+      const response = await fetch("/api/graduates", { cache: "no-store" });
+      const data = (await response.json()) as GraduatesResponse;
+      if (!response.ok || !data.ok || !Array.isArray(data.graduates)) throw new Error();
+      setGraduates(data.graduates.filter((graduate) => typeof graduate.name === "string" && graduate.name.trim()));
+    } catch {
+      setGraduates([]);
+      setGraduatesError("No pudimos cargar los egresados. Intentá nuevamente.");
+    } finally {
+      setGraduatesLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { void Promise.resolve().then(loadGraduates); }, [loadGraduates]);
 
   function update(field: keyof ReservationFormValues, value: string) {
     setValues((current) => ({ ...current, [field]: value }));
-    if (field === "name" || field === "dni" || field === "email" || field === "confirmEmail" || field === "gender") {
+    if (field === "name" || field === "dni" || field === "email" || field === "confirmEmail" || field === "gender" || field === "graduate") {
       setErrors((current) => ({ ...current, [field]: undefined }));
     }
   }
@@ -47,6 +68,7 @@ export function ReservationForm({ price, onPriceChange }: { price: number; onPri
     if (!confirmEmail) nextErrors.confirmEmail = "Volvé a ingresar tu email.";
     else if (email !== confirmEmail) nextErrors.confirmEmail = "Los emails no coinciden.";
     if (!values.gender) nextErrors.gender = "Seleccioná una opción.";
+    if (!values.graduate) nextErrors.graduate = "Seleccioná un egresado.";
 
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
@@ -81,6 +103,24 @@ export function ReservationForm({ price, onPriceChange }: { price: number; onPri
           {errors.gender && <p className="mt-2 text-sm text-red-300" role="alert">{errors.gender}</p>}
         </fieldset>
         <label className="block">
+          <span className="mb-2 block text-sm font-semibold text-zinc-200">Egresado</span>
+          <select
+            className="field min-h-[52px] max-w-full appearance-none pr-10"
+            name="graduate"
+            required
+            disabled={graduatesLoading}
+            value={values.graduate}
+            onChange={(event) => update("graduate", event.target.value)}
+            aria-invalid={Boolean(errors.graduate)}
+            aria-describedby={errors.graduate ? "graduate-error" : graduatesError ? "graduates-load-error" : undefined}
+          >
+            <option value="">{graduatesLoading ? "Cargando egresados…" : "Seleccioná un egresado"}</option>
+            {graduates.map((graduate) => <option key={graduate.name} value={graduate.name} disabled={graduate.full}>{graduate.name}{graduate.full ? " — Cupo completo" : ""}</option>)}
+          </select>
+          {errors.graduate && <p id="graduate-error" className="mt-2 text-sm text-red-300" role="alert">{errors.graduate}</p>}
+          {graduatesError && <p id="graduates-load-error" className="mt-2 text-sm text-red-300" role="alert">{graduatesError} <button type="button" className="font-semibold underline underline-offset-2" onClick={() => void loadGraduates()}>Reintentar</button></p>}
+        </label>
+        <label className="block">
           <span className="mb-2 block text-sm font-semibold text-zinc-200">Nombre y apellido</span>
           <input className="field" name="name" autoComplete="name" required value={values.name} onChange={(e) => update("name", e.target.value)} placeholder="Nombre y apellido" aria-invalid={Boolean(errors.name)} />
           {errors.name && <p className="mt-2 text-sm text-red-300" role="alert">{errors.name}</p>}
@@ -102,7 +142,11 @@ export function ReservationForm({ price, onPriceChange }: { price: number; onPri
         </label>
         <PrimaryButton type="submit"><span className="flex w-full items-center justify-between"><span>Continuar con la compra</span><ArrowRight aria-hidden="true" className="h-5 w-5" /></span></PrimaryButton>
       </form>
-      <ConfirmationBottomSheet open={open} values={values} price={price} onPriceChange={onPriceChange} onClose={() => setOpen(false)} />
+      <ConfirmationBottomSheet open={open} values={values} price={price} onPriceChange={onPriceChange} onClose={() => setOpen(false)} onGraduateError={(code) => {
+        setValues((current) => ({ ...current, graduate: "" }));
+        setErrors((current) => ({ ...current, graduate: code === "GRADUATE_FULL" ? "Ya cumplió con el cupo máximo de 15 invitados." : "Seleccioná un egresado válido." }));
+        void loadGraduates();
+      }} />
     </>
   );
 }

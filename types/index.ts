@@ -43,6 +43,8 @@ export type CreateReservationErrorCode =
   | "ACTIVE_RESERVATION_EXISTS"
   | "REJECTED_RESERVATION_EXISTS"
   | "SOLD_OUT"
+  | "GRADUATE_FULL"
+  | "INVALID_GRADUATE"
   | "INVALID_DATA"
   | "NETWORK_ERROR";
 
@@ -70,4 +72,20 @@ export type ReceiptUploadResponse =
 export type ReservationFormValues = Pick<Reservation, "name" | "dni" | "email"> & {
   confirmEmail: string;
   gender: Gender | "";
+  graduate: string;
+};
+
+export type Graduate = {
+  name: string;
+  used: number;
+  remaining: number;
+  full: boolean;
+};
+
+export type GraduatesResponse = {
+  ok: boolean;
+  maxGuestsPerGraduate?: number;
+  graduates?: Graduate[];
+  error?: string;
+  code?: string;
 };

@@ -9,7 +9,7 @@ import { PrimaryButton, SecondaryButton } from "./Buttons";
 const contactEmail = "recibidaia@gmail.com";
 type Outcome = { kind: "price"; price: number } | { kind: "active" } | { kind: "rejected" } | { kind: "soldOut" } | { kind: "error"; message: string } | null;
 
-export function ConfirmationBottomSheet({ open, values, price, onPriceChange, onClose }: { open: boolean; values: ReservationFormValues; price: number; onPriceChange: (price: number) => void; onClose: () => void }) {
+export function ConfirmationBottomSheet({ open, values, price, onPriceChange, onClose, onGraduateError }: { open: boolean; values: ReservationFormValues; price: number; onPriceChange: (price: number) => void; onClose: () => void; onGraduateError: (code: "GRADUATE_FULL" | "INVALID_GRADUATE") => void }) {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [outcome, setOutcome] = useState<Outcome>(null);
@@ -22,7 +22,7 @@ export function ConfirmationBottomSheet({ open, values, price, onPriceChange, on
     try {
       const response = await fetch("/api/reservations", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ genero: values.gender, nombre: values.name.trim(), dni: values.dni, email: values.email, expectedPrice: price }),
+        body: JSON.stringify({ genero: values.gender, nombre: values.name.trim(), dni: values.dni, email: values.email, expectedPrice: price, egresado: values.graduate }),
       });
       const data = (await response.json()) as CreateReservationResponse;
       if (data.code === "PRICE_CHANGED") {
@@ -32,6 +32,11 @@ export function ConfirmationBottomSheet({ open, values, price, onPriceChange, on
       if (data.code === "ACTIVE_RESERVATION_EXISTS") { setOutcome({ kind: "active" }); return; }
       if (data.code === "REJECTED_RESERVATION_EXISTS") { setOutcome({ kind: "rejected" }); return; }
       if (data.code === "SOLD_OUT") { setOutcome({ kind: "soldOut" }); return; }
+      if (data.code === "GRADUATE_FULL" || data.code === "INVALID_GRADUATE") {
+        close();
+        onGraduateError(data.code);
+        return;
+      }
       const reservation = data.reservation;
       const validReservation = reservation && typeof reservation.name === "string" && reservation.name.trim() && typeof reservation.dni === "string" && reservation.dni.trim() && typeof reservation.code === "string" && reservation.code.trim() && Number.isFinite(Number(reservation.price));
       if (!response.ok || !data.ok || !validReservation) { setOutcome({ kind: "error", message: "No pudimos crear la reserva. Intentá nuevamente." }); return; }
@@ -55,7 +60,7 @@ export function ConfirmationBottomSheet({ open, values, price, onPriceChange, on
         <div className="mt-6 space-y-3">{outcome.kind === "price" && <PrimaryButton type="button" onClick={() => { onPriceChange(outcome.price); close(); }}>Actualizar precio</PrimaryButton>}{outcome.kind === "active" && <PrimaryButton href="/consulta">Consultar mi entrada</PrimaryButton>}<SecondaryButton type="button" onClick={close}>Cerrar</SecondaryButton></div>
       </div> : <>
         <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-accent/70">Último paso</p><h2 id="confirmation-title" className="mt-2 text-[1.75rem] font-black tracking-[-0.04em]">Confirmar compra</h2>
-        <dl className="mt-6 divide-y divide-white/[0.07] rounded-[20px] border border-white/[0.08] bg-white/[0.035] px-4">{[["Nombre", values.name], ["DNI", values.dni], ["Gmail", values.email], ["Género", values.gender], ["Precio", formatPrice(price)]].map(([label, value]) => <div key={label} className="flex items-start justify-between gap-4 py-3"><dt className="text-sm text-zinc-400">{label}</dt><dd className="break-all text-right text-sm font-bold">{value}</dd></div>)}</dl>
+        <dl className="mt-6 divide-y divide-white/[0.07] rounded-[20px] border border-white/[0.08] bg-white/[0.035] px-4">{[["Nombre", values.name], ["DNI", values.dni], ["Gmail", values.email], ["Género", values.gender], ["Egresado", values.graduate], ["Precio", formatPrice(price)]].map(([label, value]) => <div key={label} className="flex items-start justify-between gap-4 py-3"><dt className="text-sm text-zinc-400">{label}</dt><dd className="break-all text-right text-sm font-bold">{value}</dd></div>)}</dl>
         <p className="mt-5 text-sm leading-6 text-zinc-400">Al confirmar, te informaremos el vencimiento definido para tu reserva.</p>{outcome?.kind === "error" && <p className="mt-4 rounded-[18px] border border-red-400/25 bg-red-400/[0.075] p-3.5 text-sm text-red-200" role="alert">{outcome.message}</p>}
         <div className="mt-6 space-y-3"><PrimaryButton type="button" disabled={submitting} onClick={confirm}>{submitting ? "Creando reserva…" : "Confirmar compra"}</PrimaryButton><SecondaryButton type="button" disabled={submitting} onClick={close}>Volver</SecondaryButton></div>
       </>}
