@@ -39,7 +39,7 @@ export function ReservationForm({ price, onPriceChange }: { price: number; onPri
       setGraduates(data.graduates.filter((graduate) => typeof graduate.name === "string" && graduate.name.trim()));
     } catch {
       setGraduates([]);
-      setGraduatesError("No pudimos cargar los egresados. Intentá nuevamente.");
+      setGraduatesError("No se pudieron cargar los egresados. Intentá nuevamente.");
     } finally {
       setGraduatesLoading(false);
     }
@@ -103,24 +103,6 @@ export function ReservationForm({ price, onPriceChange }: { price: number; onPri
           {errors.gender && <p className="mt-2 text-sm text-red-300" role="alert">{errors.gender}</p>}
         </fieldset>
         <label className="block">
-          <span className="mb-2 block text-sm font-semibold text-zinc-200">Egresado</span>
-          <select
-            className="field min-h-[52px] max-w-full appearance-none pr-10"
-            name="graduate"
-            required
-            disabled={graduatesLoading}
-            value={values.graduate}
-            onChange={(event) => update("graduate", event.target.value)}
-            aria-invalid={Boolean(errors.graduate)}
-            aria-describedby={errors.graduate ? "graduate-error" : graduatesError ? "graduates-load-error" : undefined}
-          >
-            <option value="">{graduatesLoading ? "Cargando egresados…" : "Seleccioná un egresado"}</option>
-            {graduates.map((graduate) => <option key={graduate.name} value={graduate.name} disabled={graduate.full}>{graduate.name}{graduate.full ? " — Cupo completo" : ""}</option>)}
-          </select>
-          {errors.graduate && <p id="graduate-error" className="mt-2 text-sm text-red-300" role="alert">{errors.graduate}</p>}
-          {graduatesError && <p id="graduates-load-error" className="mt-2 text-sm text-red-300" role="alert">{graduatesError} <button type="button" className="font-semibold underline underline-offset-2" onClick={() => void loadGraduates()}>Reintentar</button></p>}
-        </label>
-        <label className="block">
           <span className="mb-2 block text-sm font-semibold text-zinc-200">Nombre y apellido</span>
           <input className="field" name="name" autoComplete="name" required value={values.name} onChange={(e) => update("name", e.target.value)} placeholder="Nombre y apellido" aria-invalid={Boolean(errors.name)} />
           {errors.name && <p className="mt-2 text-sm text-red-300" role="alert">{errors.name}</p>}
@@ -139,6 +121,24 @@ export function ReservationForm({ price, onPriceChange }: { price: number; onPri
           <span className="mb-2 block text-sm font-semibold text-zinc-200">Confirmar Gmail</span>
           <input className="field" name="confirmEmail" type="email" inputMode="email" autoComplete="email" required value={values.confirmEmail} onChange={(e) => update("confirmEmail", e.target.value)} placeholder="Repetí tu email" aria-invalid={Boolean(errors.confirmEmail)} aria-describedby={errors.confirmEmail ? "confirm-email-error" : undefined} />
           {errors.confirmEmail && <p id="confirm-email-error" className="mt-2 text-sm text-red-300" role="alert">{errors.confirmEmail}</p>}
+        </label>
+        <label className="block">
+          <span className="mb-2 block text-sm font-semibold text-zinc-200">Egresado</span>
+          <select
+            className="field min-h-[52px] max-w-full pr-10"
+            name="graduate"
+            required
+            disabled={graduatesLoading || Boolean(graduatesError)}
+            value={values.graduate}
+            onChange={(event) => update("graduate", event.target.value)}
+            aria-invalid={Boolean(errors.graduate)}
+            aria-describedby={errors.graduate ? "graduate-error" : graduatesError ? "graduates-load-error" : undefined}
+          >
+            <option value="">{graduatesLoading ? "Cargando egresados..." : "Seleccioná un egresado"}</option>
+            {graduates.map((graduate) => <option key={graduate.name} value={graduate.name} disabled={graduate.full}>{graduate.name}{graduate.full ? " — Cupo completo" : ""}</option>)}
+          </select>
+          {errors.graduate && <p id="graduate-error" className="mt-2 text-sm text-red-300" role="alert">{errors.graduate}</p>}
+          {graduatesError && <p id="graduates-load-error" className="mt-2 text-sm text-red-300" role="alert">{graduatesError} <button type="button" className="font-semibold underline underline-offset-2" onClick={() => void loadGraduates()}>Reintentar</button></p>}
         </label>
         <PrimaryButton type="submit"><span className="flex w-full items-center justify-between"><span>Continuar con la compra</span><ArrowRight aria-hidden="true" className="h-5 w-5" /></span></PrimaryButton>
       </form>
